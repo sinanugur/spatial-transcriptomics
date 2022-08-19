@@ -41,10 +41,10 @@ scrna=readRDS(file = opt$rds)
 
 
 
-RNA_=paste0("RNA_snn_res.",opt$resolution)
+SCT_=paste0("SCT_snn_res.",opt$resolution)
 
 
-Idents(object = scrna) <- scrna@meta.data[[RNA_]]
+Idents(object = scrna) <- scrna@meta.data[[SCT_]]
 
 
 all_markers=FindAllMarkers(scrna, logfc.threshold = opt$logfc.threshold,test.use = opt$test.use )

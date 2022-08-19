@@ -12,6 +12,8 @@ option_list = list(
 
 )
  
+ source("workflow/scripts/scrna-functions.R")
+
 
 
 opt_parser = optparse::OptionParser(option_list=option_list)
@@ -34,12 +36,17 @@ domanska_markers=bind_rows(domanska_mucosas,domanska_muscularis) %>% distinct(ge
 
 scrna=readRDS(file = opt$rds)
 
-RNA_=paste0("RNA_snn_res.",opt$resolution)
+SCT_=paste0("SCT_snn_res.",opt$resolution)
 
 output.dir=paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/")
 dir.create(paste0(output.dir,"selected-markers/plots/"),recursive = T)
 
-Idents(object = scrna) <- scrna@meta.data[[RNA_]]
+Idents(object = scrna) <- scrna@meta.data[[SCT_]]
+
+
+function_image_fixer(scrna,opt$sampleid) -> scrna
+
+DefaultAssay(scrna) <- "Spatial"
 
 
 
@@ -52,10 +59,11 @@ try({
 p1 <- FeaturePlot(scrna, reduction = "umap", features=i) + scale_color_continuous(type="viridis")
 p2 <- DotPlot(scrna, features=i)
 p3 <- VlnPlot(scrna,features=i)
+p4 <- SpatialFeaturePlot(scrna, features = i, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
 
-suppressWarnings(((p1|p2)/p3) -> wp)
+suppressWarnings(((p1|p2)/(p3|p4)) -> wp)
 
-ggsave(paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/selected-markers/plots/",i,".pdf"),wp,height=9,width=9)
+ggsave(paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/selected-markers/plots/",i,".pdf"),wp,height=9,width=11)
 
 })
 

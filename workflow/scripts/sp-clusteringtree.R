@@ -9,12 +9,10 @@ option_list = list(
     optparse::make_option(c("--rds"), type="character", default=NULL, 
               help="RAW rds file of a Seurat object", metavar="character"),
 
-    optparse::make_option(c("--normalization.method"), type="character", default="LogNormalize", 
+    optparse::make_option(c("--normalization.method"), type="character", default="SCT", 
               help="Normalization method[default= %default]", metavar="character"),
           optparse::make_option(c("--output"), type="character", default="clustree.pdf", 
               help="Output clustree file name", metavar="character"),
-                    optparse::make_option(c("--jackandelbow"), type="character", default="jackandelbow.pdf", 
-              help="Output jack and elbow file name", metavar="character"),
                             optparse::make_option(c("--hvfplot"), type="character", default="variable-features.pdf", 
               help="Variable features file name", metavar="character"),
                                 optparse::make_option(c("--heatmap"), type="character", default="dimheatmap.pdf", 
@@ -41,12 +39,11 @@ source("workflow/scripts/scrna-functions.R")
 
 scrna=readRDS(file = opt$rds)
 
-scrna <- NormalizeData(scrna, normalization.method = opt$normalization.method, scale.factor = opt$scale.factor)
+scrna <- SCTransform(scrna,assay = "Spatial",verbose = FALSE)
 scrna <- FindVariableFeatures(scrna, selection.method = "vst", nfeatures = opt$nfeatures)
 
-all.genes <- rownames(scrna)
-scrna <- ScaleData(scrna, features = all.genes)
-scrna <- RunPCA(scrna, features = VariableFeatures(object = scrna))
+
+scrna <- RunPCA(scrna,assay="SCT",features = VariableFeatures(object = scrna))
 
 
 
@@ -69,13 +66,6 @@ DimHeatmap(scrna, dims = 1:15, cells = 500, balanced = TRUE,fast = FALSE)
 #ggsave(paste0(output.dir,"DimHeatMap_plot.pdf") ,width = 8,height = 15)
 ggsave(opt$heatmap ,width = 8,height = 15)
 
-
-scrna <- JackStraw(scrna, num.replicate = 100,  dims=50)
-scrna <- ScoreJackStraw(scrna, dims = 1:50)
-plot1 <- JackStrawPlot(scrna, dims = 1:50) 
-plot2 <- ElbowPlot(scrna, ndims=50)
-#ggsave(paste0(output.dir,"JackandElbow_plot.pdf"), plot1 + plot2,width = 13,height = 5)
-ggsave(opt$jackandelbow, plot1 + plot2,width = 13,height = 5)
 
 dimensionReduction=function_pca_dimensions(scrna)
 scrna <- FindNeighbors(scrna, dims = 1:dimensionReduction)

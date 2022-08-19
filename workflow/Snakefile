@@ -3,10 +3,9 @@ from yaml import load
 import os
 
 
-files, = glob_wildcards("data/{sample}/raw_feature_bc_matrix/matrix.mtx.gz")    
-others, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix/matrix.mtx.gz")
-h5files, = glob_wildcards("data/{sample}/filtered_feature_bc_matrix.h5")
-files=list(filter(lambda i: "/" not in i, files+others+h5files)) #do not capture subdirectories etc
+files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")    
+
+files=list(filter(lambda i: "/" not in i, files)) #do not capture subdirectories etc
 
 #basic paramaters
 min_cells=config.get("min_cells",3)
@@ -37,27 +36,28 @@ integration_id=config.get("integration_id","combined")
 integration_resolution=str(config.get("resolution",0.8))
 celltypist_model=config.get("celltypist_model","Immune_All_Low.pkl")
 
-include: "rules/seurat.smk"
+include: "rules/spatialseurat.smk"
+include: "rules/deconvolution.smk"
 
 if route == "minimal":
     rule all:
         input:
             expand("analyses/raw/{sample}.rds",sample=files)
 
-elif route == "standart":
+elif route == "standard":
 
     rule all:
         input:
             expand("results/{sample}/clusteringTree/clusteringTree-{sample}.pdf",sample=files),
             expand(["results/{sample}/resolution-" + x + "/{sample}.positive-markers-forAllClusters.xlsx" for x in resolution],sample=files),
-            expand(["results/{sample}/resolution-" + x + "/{sample}.number-of-cells-per-cluster.xlsx" for x in resolution],sample=files),
+            #expand(["results/{sample}/resolution-" + x + "/{sample}.number-of-cells-per-cluster.xlsx" for x in resolution],sample=files),
             expand("analyses/raw/{sample}.rds",sample=files),
             expand(["analyses/processed/" + x + "/{sample}.rds" for x in resolution],sample=files),
             expand(["results/{sample}/resolution-" + x + "/selected-markers/selected-markers-dotplot.pdf" for x in resolution],sample=files),
             expand(["results/{sample}/resolution-" + x + "/selected-markers/plots/" for x in resolution], sample=files),
             expand(["results/{sample}/resolution-" + x + "/markers/" for x in resolution], sample=files),
             expand(["results/{sample}/resolution-" + x + "/{sample}.umap.pdf" for x in resolution], sample=files),
-            expand(["results/{sample}/resolution-" + x + "/enrichment/GO-enrichment-all_clusters-ontology-{ontology}.xlsx".format(ontology=ontology) for x in resolution], sample=files)
+            #expand(["results/{sample}/resolution-" + x + "/enrichment/GO-enrichment-all_clusters-ontology-{ontology}.xlsx".format(ontology=ontology) for x in resolution], sample=files)
 
 elif route == "clustree" or route == "clusteringTree":
     rule all:
@@ -65,19 +65,17 @@ elif route == "clustree" or route == "clusteringTree":
             expand("results/{sample}/clusteringTree/clusteringTree-{sample}.pdf",sample=files)
 
 
-elif route == "annotate":
-    rule all:
+elif route == "decon":
+    scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
+    rule deconvolution:
         input:
-            expand(["analyses/celltypist/" + x + "/{sample}.rds" for x in resolution],sample=files)
-
-
-
-elif route == "integration":
-    files, = glob_wildcards("analyses/processed/" + integration_resolution + "/{sample}.rds")
-    rule all:
-        input:
-            "analyses/integration/harmony/" + integration_id + "_harmony.rds",
-            "analyses/integration/seurat/" + integration_id + "_seurat.rds"
+            #expand("results/{sample}/deconvolution/spotlight/{sample}-{datafile}-spotlight.pdf",datafile=scrnadatafiles,sample=files),
+            #expand("results/{sample}/deconvolution/gbm/{sample}-{modelfile}-gbm.pdf",modelfile=models,sample=files),
+            expand("results/{sample}/deconvolution/seurat/{sample}-{datafile}-seurat.pdf",datafile=scrnadatafiles,sample=files)
+            #expand("results/{sample}/deconvolution/rctd/{sample}-{datafile}-rctd.pdf",datafile=scrnadatafiles,sample=files)
+            #expand("results/{sample}/deconvolution/spotlight/{datafile}/"),
+            #expand("results/{sample}/deconvolution/inhouse_gbm/{datafile}/"),
+            #expand("results/{sample}/deconvolution/seurat/{datafile}/")
 
 else:
     pass

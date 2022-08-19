@@ -17,6 +17,7 @@ option_list = list(
 )
  
 
+source("workflow/scripts/scrna-functions.R")
 
 opt_parser = optparse::OptionParser(option_list=option_list)
 opt = optparse::parse_args(opt_parser)
@@ -29,17 +30,20 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 require(Seurat)
 require(tidyverse)
 require(viridis)
-require(patchwork)
-
+ 
 
 
 
 scrna=readRDS(file = opt$rds)
 
-RNA_=paste0("RNA_snn_res.",opt$resolution)
+SCT_=paste0("SCT_snn_res.",opt$resolution)
 
 
 Positive_Features=openxlsx::read.xlsx(opt$xlsx) %>% group_by(cluster) %>% slice_min(order_by = p_val_adj,n = opt$n) %>% select(cluster,gene) 
+
+function_image_fixer(scrna,opt$sampleid) -> scrna
+
+DefaultAssay(scrna) <- "Spatial"
 
 
 for(d in (Positive_Features %>% distinct(cluster) %>% pull())) {
@@ -56,8 +60,8 @@ suppressMessages(for (i in 1:nrow(Positive_Features)) {
 p1 <- FeaturePlot(scrna, reduction = "umap", features=gene) + scale_color_continuous(type="viridis")
 p2 <- DotPlot(scrna, features=gene)
 p3 <- VlnPlot(scrna,features=gene)
-
-suppressWarnings(((p1|p2)/p3) -> wp)
+p4 <- SpatialFeaturePlot(scrna, features = gene, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
+suppressWarnings(((p1|p2)/(p3|p4)) -> wp)
 
 ggsave(paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/markers/cluster",cluster,"/",gene,".pdf"),wp,height=9,width=9)
 
