@@ -7,8 +7,8 @@ import sys
 import torch
 
 print(sys.argv[1])
-adata_st = sc.read_visium(path=sys.argv[1])
-adata_sc= sc.read(filename=sys.argv[2])
+adata_st = sc.read(sys.argv[1])
+adata_sc= sc.read(sys.argv[2])
 
 adata_sc.X=adata_sc.raw.X.copy()
 

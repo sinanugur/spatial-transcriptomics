@@ -62,33 +62,35 @@ rule normalization_pca_rds:
 
 rule umap_plot:
     input:
-        "analyses/processed/{res}/{sample}.rds"
+        rds="analyses/processed/{res}/{sample}.rds"
     output:
         "results/{sample}/resolution-{res}/{sample}.umap.pdf"
     shell:
-        "workflow/scripts/sp-umap.R --rds {input} --sampleid {wildcards.sample} --resolution {wildcards.res}"
+        "workflow/scripts/sp-umap.R --rds {input.rds} --sampleid {wildcards.sample} --resolution {wildcards.res}"
 
 
     
 rule clustermarkers:
     input:
-        "analyses/processed/{res}/{sample}.rds"
+        rds="analyses/processed/{res}/{sample}.rds",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx",
         "results/{sample}/resolution-{res}/{sample}.all-markers-forAllClusters.xlsx"
     shell:
         """
-        workflow/scripts/sp-find-markers.R --rds {input} --resolution {wildcards.res} --sampleid {wildcards.sample} --logfc.threshold {logfc_threshold} --test.use {test_use}
+        workflow/scripts/sp-find-markers.R --rds {input.rds} --resolution {wildcards.res} --sampleid {wildcards.sample} --logfc.threshold {logfc_threshold} --test.use {test_use}
         """
 
 rule selected_markers_plots:
     input:
-        "analyses/processed/{res}/{sample}.rds"
+        rds="analyses/processed/{res}/{sample}.rds",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/resolution-{res}/selected-markers/selected-markers-dotplot.pdf",
         directory("results/{sample}/resolution-{res}/selected-markers/plots/")
     shell:
-        "workflow/scripts/sp-selected-marker-plots.R --rds {input} --resolution {wildcards.res} --sampleid {wildcards.sample}"
+        "workflow/scripts/sp-selected-marker-plots.R --rds {input.rds} --resolution {wildcards.res} --sampleid {wildcards.sample}"
 
 
 rule positive_markers_plots:

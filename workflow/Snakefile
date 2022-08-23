@@ -36,6 +36,11 @@ integration_id=config.get("integration_id","combined")
 integration_resolution=str(config.get("resolution",0.8))
 celltypist_model=config.get("celltypist_model","Immune_All_Low.pkl")
 
+
+
+def get_mem_mb(wildcards, threads):
+    return threads * 5000
+
 include: "rules/spatialseurat.smk"
 include: "rules/deconvolution.smk"
 
@@ -76,6 +81,12 @@ elif route == "decon":
             #expand("results/{sample}/deconvolution/spotlight/{datafile}/"),
             #expand("results/{sample}/deconvolution/inhouse_gbm/{datafile}/"),
             #expand("results/{sample}/deconvolution/seurat/{datafile}/")
+
+elif route == "tangram":
+    scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
+    rule tangram:
+        input:
+            expand("results/{sample}/deconvolution/tangram/{sample}-{datafile}-tangram.pdf",datafile=scrnadatafiles,sample=files)
 
 else:
     pass
