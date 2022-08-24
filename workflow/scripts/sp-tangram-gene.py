@@ -6,6 +6,7 @@ import pandas as pd
 import sys
 import matplotlib.pyplot as plt
 import torch
+import pickle
 
 
 
@@ -20,16 +21,20 @@ tg.pp_adatas(adata_sc,adata_st,genes=None)
 
 
 if torch.cuda.is_available():
-       ad_map = tg.map_cells_to_space(
+    ad_map = tg.map_cells_to_space(
                    adata_sc, 
                    adata_st,device="cuda:0")
 else:
-       ad_map = tg.map_cells_to_space(
+    print("No GPU")
+    ad_map = tg.map_cells_to_space(
                    adata_sc, 
-                   adata_st)
+                   adata_st,num_epochs=10)
 
 
 ad_ge = tg.project_genes(ad_map, adata_sc)
+
+with open("ad_ge.pkl","wb") as p:
+    pickle.dump(ad_ge,p)
 
 genes=["LYVE1","F13A1","FOLR2","SELENOP","APOE","SLC40A1","C1QB","DAB2","PDK4","SPP1","ACP5","CD9","FCER1A","CD1C","CLEC10A","HSPA6","DNAJB1",
        "HSPA1B","S100A8","S100A9","S100A12","EREG","G0S2","FCN1","CCL20","IL1B","IL23A","CXCL10","CXCL9","GBP1","CDC1C","CCL3L1",
@@ -39,14 +44,22 @@ genes=list(set(list(ad_ge.var["features"].to_numpy())) & set(genes))
 genes=list(map(lambda x: x.lower(),genes))
 
 
-expid=list(adata_st.uns['spatial'])[0]
 
-scale_fac=adata_st.uns['spatial'][expid]['scalefactors']['tissue_hires_scalef']
+print(ad_ge.obs.columns)
 
-pl=tg.plot_genes_sc(genes, adata_measured=adata_st, adata_predicted=ad_ge, perc=0.02,scale_factor=scale_fac,spot_size=40,return_figure=True)
+#df=ad_ge.obs[[x + " (predicted)" for x in genes]]
 
-plt.rcParams['figure.figsize'] = [15, 15]
-plt.rcParams['figure.dpi'] = 150
+#df.columns = df.columns.str.replace(" \(predicted\)","").str.upper()
+
+#df.to_csv(sys.argv[3])
 
 
-pl.savefig(sys.argv[3], format="pdf", bbox_inches="tight")
+#expid=list(adata_st.uns['Spatial'])[0]
+
+#scale_fac=adata_st.uns['Spatial'][expid]['scalefactors']['tissue_hires_scalef']
+
+#pl=tg.plot_genes_sc(genes, adata_measured=adata_st, adata_predicted=ad_ge, perc=0.02,scale_factor=scale_fac,spot_size=40,return_figure=True)
+
+#plt.rcParams['figure.figsize'] = [15, 15]
+#plt.rcParams['figure.dpi'] = 150
+#pl.savefig(sys.argv[3], format="pdf", bbox_inches="tight")

@@ -61,15 +61,32 @@ rule tangram_pdf:
 
 rule tangram_gene:
     input:
-        "scrna/{datafile}.h5ad",
-        "data/{sample}/outs/filtered_feature_bc_matrix.h5"
+        spatial="analyses/h5ad/{sample}.h5ad",
+        scrna="scrna/{datafile}.h5ad"
     output:
-        "results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf"
+        #"results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf"
+        "analyses/tangramgene/{datafile}/{sample}.csv"
     threads: 5
     resources:
         mem_mb=get_mem_mb,
         gpu=1
     shell:
         """
-        workflow/scripts/spatial-tangram-gene.py data/{wildcards.sample}/outs {input[0]} {output}
+        workflow/scripts/sp-tangram-gene.py {input.spatial} {input.scrna} {output}
+        """   
+
+rule cell2location:
+    input:
+        spatial="analyses/h5ad/{sample}.h5ad",
+        scrna="scrna/{datafile}.h5ad"
+    output:
+        #"results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf"
+        "analyses/cell2location/{datafile}/{sample}.csv"
+    threads: 5
+    resources:
+        mem_mb=get_mem_mb,
+        gpu=1
+    shell:
+        """
+        workflow/scripts/sp-cell2location.py {input.spatial} {input.scrna} {output}
         """   
