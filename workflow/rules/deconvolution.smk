@@ -86,7 +86,7 @@ rule tangram_gene_pdf:
         directory("results/{sample}/deconvolution/tangramgene/{datafile}/")
     shell:
         """
-        workflow/scripts/sp-tangram-pdf.R --rds {input.rds} --predicted {input.predicted} --measured {input.measured} --output.dir {output} --sampleid {wildcards.sample}
+        workflow/scripts/sp-tangram-gene-pdf.R --rds {input.rds} --predicted {input.predicted} --measured {input.measured} --output.dir {output} --sampleid {wildcards.sample}
         """   
 
 rule cell2location:
