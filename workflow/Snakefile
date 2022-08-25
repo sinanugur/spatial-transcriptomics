@@ -94,7 +94,7 @@ elif route == "tangramgene":
         input:
             #expand("results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf",datafile=scrnadatafiles,sample=files)
             #expand("analyses/tangramgene/{datafile}/{sample}.predicted.csv",datafile=scrnadatafiles,sample=files)
-            
+            expand("results/{sample}/deconvolution/tangramgene/{datafile}/",datafile=scrnadatafiles,sample=files)
 
 elif route == "cell2loc":
     scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
