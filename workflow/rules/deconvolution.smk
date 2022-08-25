@@ -65,14 +65,28 @@ rule tangram_gene:
         scrna="scrna/{datafile}.h5ad"
     output:
         #"results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf"
-        "analyses/tangramgene/{datafile}/{sample}.csv"
+        predicted="analyses/tangramgene/{datafile}/{sample}.predicted.csv",
+        measured="analyses/tangramgene/{datafile}/{sample}.measured.csv",
+
     threads: 5
     resources:
         mem_mb=get_mem_mb,
         gpu=1
     shell:
         """
-        workflow/scripts/sp-tangram-gene.py {input.spatial} {input.scrna} {output}
+        workflow/scripts/sp-tangram-gene.py {input.spatial} {input.scrna} {output.predicted} {output.measured}
+        """
+
+rule tangram_gene_pdf:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        predicted="analyses/tangramgene/{datafile}/{sample}.predicted.csv",
+        measured="analyses/tangramgene/{datafile}/{sample}.measured.csv"
+    output:
+        directory("results/{sample}/deconvolution/tangramgene/{datafile}/")
+    shell:
+        """
+        workflow/scripts/sp-tangram-pdf.R --rds {input.rds} --predicted {input.predicted} --measured {input.measured} --output.dir {output} --sampleid {wildcards.sample}
         """   
 
 rule cell2location:

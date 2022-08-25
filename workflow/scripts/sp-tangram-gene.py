@@ -12,7 +12,7 @@ import pickle
 
 print(sys.argv[1])
 adata_st = sc.read(sys.argv[1])
-adata_sc= sc.read(sys.argv[2])
+adata_sc = sc.read(sys.argv[2])
 
 adata_sc.X=adata_sc.raw.X.copy()
 
@@ -28,7 +28,7 @@ else:
     print("No GPU")
     ad_map = tg.map_cells_to_space(
                    adata_sc, 
-                   adata_st,num_epochs=10)
+                   adata_st)
 
 
 ad_ge = tg.project_genes(ad_map, adata_sc)
@@ -45,9 +45,20 @@ genes=list(map(lambda x: x.lower(),genes))
 
 
 
-print(ad_ge.obs.columns)
+try:
+    tg.plot_genes_sc(genes, adata_measured=adata_st, adata_predicted=ad_ge, perc=0.02,spot_size=40,return_figure=False)
+except:
+    pass
 
-#df=ad_ge.obs[[x + " (predicted)" for x in genes]]
+
+
+df_predicted=ad_ge.obs[[x + " \(predicted\)" for x in genes]]
+df_measured=adata_st.obs[[x + " \(measured\)" for x in genes]]
+
+print(df_predicted)
+
+df_predicted.to_csv(sys.argv[3])
+df_measured.to_csv(sys.argv[4])
 
 #df.columns = df.columns.str.replace(" \(predicted\)","").str.upper()
 

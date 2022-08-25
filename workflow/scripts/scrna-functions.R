@@ -51,7 +51,6 @@ IMAGE@coordinates[Spatial_Data@images$slice1@coordinates %>% rownames(),] -> IMA
 Spatial_Data@images$"image" <- IMAGE
 
 Spatial_Data@images$"image"@assay <- "Spatial"
-Spatial_Data@images$"image"@assay <- "Spatial"
 
 Spatial_Data@images$"image"@key <- paste0("image","_")
 

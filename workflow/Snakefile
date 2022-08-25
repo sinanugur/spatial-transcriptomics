@@ -93,11 +93,12 @@ elif route == "tangramgene":
     rule tangramgene:
         input:
             #expand("results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf",datafile=scrnadatafiles,sample=files)
-            expand("analyses/tangramgene/{datafile}/{sample}.csv",datafile=scrnadatafiles,sample=files)
+            #expand("analyses/tangramgene/{datafile}/{sample}.predicted.csv",datafile=scrnadatafiles,sample=files)
+            
 
 elif route == "cell2loc":
     scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
-    rule tangramgene:
+    rule cell2l:
         input:
             #expand("results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf",datafile=scrnadatafiles,sample=files)
             expand("analyses/cell2location/{datafile}/{sample}.csv",datafile=scrnadatafiles,sample=files)
