@@ -7,7 +7,7 @@ option_list = list(
               help="Sample ID", metavar="character"),
     optparse::make_option(c("--predicted"), type="character", default=NULL, 
               help="CSV table of predictions", metavar="character"),
-        optparse::make_option(c("--measured"), type="character", default=NULL, 
+    optparse::make_option(c("--measured"), type="character", default=NULL, 
               help="CSV table of measured", metavar="character"),
     optparse::make_option(c("--output.dir"), type="character", default="./", 
               help="Output directory", metavar="character")
@@ -27,7 +27,7 @@ if (is.null(opt$rds) || is.null(opt$sampleid) || is.null(opt$predicted) || is.nu
 require(Seurat)
 require(tidyverse)
 require(viridis)
-
+require(patchwork)
 
 source("workflow/scripts/scrna-functions.R")
 
@@ -65,7 +65,7 @@ p2 <- SpatialFeaturePlot(Spatial_Data, features = i, ncol = 1, alpha = c(0.1, 1)
 suppressWarnings(((p1|p2)) -> wp)
 
 
-ggsave(paste0(opt$output.dir,i,".pdf"),p1,height=4,width=9)
+ggsave(paste0(opt$output.dir,"/",i,".pdf"),p1,height=4,width=9)
 
 })
 
