@@ -65,7 +65,7 @@ p2 <- SpatialFeaturePlot(Spatial_Data, features = i, ncol = 1, alpha = c(0.1, 1)
 suppressWarnings(((p1|p2)) -> wp)
 
 
-ggsave(paste0(opt$out.dir,i,".pdf"),p1,height=4,width=9)
+ggsave(paste0(opt$output.dir,i,".pdf"),p1,height=4,width=9)
 
 })
 

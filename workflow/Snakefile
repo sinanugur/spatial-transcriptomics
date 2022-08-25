@@ -39,7 +39,7 @@ celltypist_model=config.get("celltypist_model","Immune_All_Low.pkl")
 
 
 def get_mem_mb(wildcards, threads):
-    return threads * 5000
+    return threads * 10000
 
 include: "rules/spatialseurat.smk"
 include: "rules/deconvolution.smk"
