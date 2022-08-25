@@ -59,13 +59,14 @@ try({
 
 DefaultAssay(Spatial_Data) <- "predictions"
 p1 <- SpatialFeaturePlot(Spatial_Data,features = i, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
+
 DefaultAssay(Spatial_Data) <- "measured"
 p2 <- SpatialFeaturePlot(Spatial_Data, features = i, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
 
 suppressWarnings(((p1|p2)) -> wp)
 
 
-ggsave(paste0(opt$output.dir,"/",i,".pdf"),p1,height=4,width=9)
+ggsave(paste0(opt$output.dir,"/",i,".pdf"),wp,height=4,width=8)
 
 })
 
