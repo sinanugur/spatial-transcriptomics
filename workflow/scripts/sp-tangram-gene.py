@@ -52,10 +52,12 @@ except:
 
 
 
-df_predicted=ad_ge.obs[[x + " \(predicted\)" for x in genes]]
-df_measured=adata_st.obs[[x + " \(measured\)" for x in genes]]
+df_predicted=ad_ge.obs[[x + " (predicted)" for x in genes]]
+df_measured=adata_st.obs[[x + " (measured)" for x in genes]]
 
-print(df_predicted)
+
+df_predicted.columns = df_predicted.columns.str.replace(" \(predicted\)","").str.upper()
+df_measured.columns = df_measured.columns.str.replace(" \(measured\)","").str.upper()
 
 df_predicted.to_csv(sys.argv[3])
 df_measured.to_csv(sys.argv[4])

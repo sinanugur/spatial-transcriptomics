@@ -54,7 +54,7 @@ rule tangram_pdf:
         "results/{sample}/deconvolution/tangram/{sample}-{datafile}-tangram.pdf"
     shell:
         """
-        workflow/scripts/sp-tangram-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
+        workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
         """   
 
 
@@ -94,7 +94,6 @@ rule cell2location:
         spatial="analyses/h5ad/{sample}.h5ad",
         scrna="scrna/{datafile}.h5ad"
     output:
-        #"results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf"
         "analyses/cell2location/{datafile}/{sample}.csv"
     threads: 5
     resources:
@@ -104,3 +103,14 @@ rule cell2location:
         """
         workflow/scripts/sp-cell2location.py {input.spatial} {input.scrna} {output}
         """   
+
+rule cell2loc_pdf:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        csv="analyses/cell2location/{datafile}/{sample}.csv"
+    output:
+        "results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf"
+    shell:
+        """
+        workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
+        """  

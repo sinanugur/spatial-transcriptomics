@@ -101,7 +101,7 @@ elif route == "cell2loc":
     rule cell2l:
         input:
             #expand("results/{sample}/deconvolution/tangramgene/{sample}-{datafile}-tangramgene.pdf",datafile=scrnadatafiles,sample=files)
-            expand("analyses/cell2location/{datafile}/{sample}.csv",datafile=scrnadatafiles,sample=files)
+            expand("results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf",datafile=scrnadatafiles,sample=files)
 
 else:
     pass
