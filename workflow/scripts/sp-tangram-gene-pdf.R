@@ -63,7 +63,7 @@ p1 <- SpatialFeaturePlot(Spatial_Data,features = i, ncol = 1, alpha = c(0.1, 1),
 DefaultAssay(Spatial_Data) <- "measured"
 p2 <- SpatialFeaturePlot(Spatial_Data, features = i, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
 
-suppressWarnings(((p1|p2)) -> wp)
+suppressWarnings(((p2|p1)) -> wp)
 
 
 ggsave(paste0(opt$output.dir,"/",i,".pdf"),wp,height=4,width=8)
