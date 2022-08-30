@@ -35,9 +35,11 @@ Spatial_Data=readRDS(opt$rds)
 
 function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
+Spatial_Data <- SCTransform(Spatial_Data, assay = "Spatial", verbose = FALSE)
+Spatial_Data <- FindSpatiallyVariableFeatures(Spatial_Data, assay = "SCT", features = VariableFeatures(Spatial_Data)[1:1000],
+    selection.method = opt$selection.method)
 
-markers=SpatiallyVariableFeatures(Spatial_Data, 
-selection.method = "markvariogram") 
+markers=SpatiallyVariableFeatures(Spatial_Data, selection.method = opt$selection.method) 
 
 openxlsx::write.xlsx(markers %>% as.data.frame() %>% select(gene=1),file=opt$output)
 
