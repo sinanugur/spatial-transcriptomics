@@ -41,13 +41,13 @@ Spatial_Data <- FindSpatiallyVariableFeatures(Spatial_Data, assay = "SCT", featu
 
 markers=SpatiallyVariableFeatures(Spatial_Data, selection.method = opt$selection.method) 
 
-openxlsx::write.xlsx(markers %>% as.data.frame() %>% select(gene=1) %>% head(50),file=opt$output)
+openxlsx::write.xlsx(markers %>% as.data.frame() %>% select(gene=1),file=opt$output)
 
 output.dir=paste0("results/",opt$sampleid,"/spatial-markers/plots/")
 dir.create(output.dir,recursive = T)
 
 options(warn=-1)
-for (i in markers) {
+for (i in markers[1:50]) {
 
 #SpatialFeaturePlot(Spatial_Data, features = i, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_colour_gradientn(colours = rev(RColorBrewer::brewer.pal(n = 11, name = "RdYlGn")))
 
