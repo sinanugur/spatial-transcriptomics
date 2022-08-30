@@ -103,3 +103,18 @@ rule positive_markers_plots:
         directory("results/{sample}/resolution-{res}/markers/")
     shell:
         "workflow/scripts/sp-marker-plots.R --rds {input.rds} --resolution {wildcards.res} --sampleid {wildcards.sample} --xlsx {input.excel}"
+
+
+rule spatialfeatures:
+    input:
+        rds="analyses/processed/{res}/{sample}.rds",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+    output:
+        "results/{sample}/spatial-markers/{sample}.spatial_markers.xlsx",
+        directory("results/{sample}/spatial-markers/plots")
+    shell:
+        """
+        mkdir -p {output[1]}
+        workflow/scripts/sp-spatial-markers.R --rds {input.rds} --sampleid {wildcards.sample}  --output {output[0]} --selection.method {selection_method}
+
+        """

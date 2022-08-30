@@ -17,6 +17,7 @@ highly_variable_features=config.get("highly_variable_features",2000)
 
 mad_nCount=config.get("mad_nCount",3)
 mad_nFeature=config.get("mad_nFeature",3)
+selection_method=config.get("selection_method","markvariogram")
 
 
 
@@ -62,6 +63,7 @@ elif route == "standard":
             expand(["results/{sample}/resolution-" + x + "/{sample}.positive-markers-forAllClusters.xlsx" for x in resolution],sample=files),
             #expand(["results/{sample}/resolution-" + x + "/{sample}.number-of-cells-per-cluster.xlsx" for x in resolution],sample=files),
             expand("analyses/raw/{sample}.rds",sample=files),
+            expand("results/{sample}/spatial-markers/{sample}.spatial_markers.xlsx",sample=files),
             expand(["analyses/processed/" + x + "/{sample}.rds" for x in resolution],sample=files),
             expand(["results/{sample}/resolution-" + x + "/selected-markers/selected-markers-dotplot.pdf" for x in resolution],sample=files),
             expand(["results/{sample}/resolution-" + x + "/selected-markers/plots/" for x in resolution], sample=files),
