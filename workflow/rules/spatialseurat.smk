@@ -107,7 +107,7 @@ rule positive_markers_plots:
 
 rule spatialfeatures:
     input:
-        rds="analyses/processed/{res}/{sample}.rds",
+        rds="analyses/raw/{sample}.rds",
         imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/spatial-markers/{sample}.spatial_markers.xlsx",

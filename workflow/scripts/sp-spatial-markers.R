@@ -9,7 +9,7 @@ option_list = list(
     optparse::make_option(c("--selection.method"), type="character", default="markvariogram", 
               help="Spatial marker selection method", metavar="character"),
     optparse::make_option(c("--output"), type="character", default="output.xlsx", 
-              help="Excel file", metavar="character")
+              help="Output excel file name", metavar="character")
 
 
 )
