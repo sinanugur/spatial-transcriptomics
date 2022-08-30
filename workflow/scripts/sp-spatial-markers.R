@@ -41,7 +41,7 @@ Spatial_Data <- FindSpatiallyVariableFeatures(Spatial_Data, assay = "SCT", featu
 
 markers=SpatiallyVariableFeatures(Spatial_Data, selection.method = opt$selection.method) 
 
-openxlsx::write.xlsx(markers %>% as.data.frame() %>% select(gene=1),file=opt$output)
+openxlsx::write.xlsx(markers %>% as.data.frame() %>% select(gene=1) %>% head(50),file=opt$output)
 
 output.dir=paste0("results/",opt$sampleid,"/spatial-markers/plots/")
 dir.create(output.dir,recursive = T)

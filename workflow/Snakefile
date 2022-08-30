@@ -17,7 +17,7 @@ highly_variable_features=config.get("highly_variable_features",2000)
 
 mad_nCount=config.get("mad_nCount",3)
 mad_nFeature=config.get("mad_nFeature",3)
-selection_method=config.get("selection_method","markvariogram")
+selection_method=config.get("selection_method","moransi") #
 
 
 
