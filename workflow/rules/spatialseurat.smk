@@ -11,7 +11,7 @@ rule rds:
     output:
         "analyses/raw/{sample}.rds"
     shell:
-        "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad.nFeature} --mad.nCount {mad.nCount}"
+        "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad_nFeature} --mad.nCount {mad_nCount}"
 
 
 rule imagefix:
