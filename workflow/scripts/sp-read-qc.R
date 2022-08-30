@@ -10,7 +10,11 @@ option_list = list(
     optparse::make_option(c("--sampleid"), type="character", default=NULL, 
               help="Sample ID", metavar="character"),
     optparse::make_option(c("--percent.mt"), type="double", default=10, 
-              help="Mitochondria filtering percentage [default= %default]", metavar="character")
+              help="Mitochondria filtering percentage [default= %default]", metavar="character"),
+    optparse::make_option(c("--mad.nCount"), type="double", default=3, 
+              help="Filtering percentage [default= %default]", metavar="character"),
+    optparse::make_option(c("--mad.nFeature"), type="double", default=3, 
+              help="Filtering percentage [default= %default]", metavar="character"),
 
 
 )
@@ -66,12 +70,12 @@ ggsave(paste0(output.dir,"before-qc-trimming-violinplot.pdf"), width = 10,height
  #featureLOW=quantile(scrna$nFeature_Spatial, prob=0.01)
 
 
-lower_bound_nCount_Spatial <- median(scrna$nCount_Spatial) - 3 * mad(scrna$nCount_Spatial, constant = 1)
-upper_bound_nCount_Spatial <- median(scrna$nCount_Spatial) + 3 * mad(scrna$nCount_Spatial, constant = 1)
+lower_bound_nCount_Spatial <- median(scrna$nCount_Spatial) - opt$mad.nCount * mad(scrna$nCount_Spatial, constant = 1)
+upper_bound_nCount_Spatial <- median(scrna$nCount_Spatial) + opt$mad.nCount * mad(scrna$nCount_Spatial, constant = 1)
 
 
-lower_bound_nFeature_Spatial <- median(scrna$nFeature_Spatial) - 3 * mad(scrna$nFeature_Spatial, constant = 1)
-upper_bound_nFeature_Spatial <- median(scrna$nFeature_Spatial) + 3 * mad(scrna$nFeature_Spatial, constant = 1)
+lower_bound_nFeature_Spatial <- median(scrna$nFeature_Spatial) - opt$mad.nFeature * mad(scrna$nFeature_Spatial, constant = 1)
+upper_bound_nFeature_Spatial <- median(scrna$nFeature_Spatial) + opt$mad.nFeature * mad(scrna$nFeature_Spatial, constant = 1)
 
 
 

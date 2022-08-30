@@ -11,7 +11,7 @@ rule rds:
     output:
         "analyses/raw/{sample}.rds"
     shell:
-        "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --min.features {min_features} --min.cells {min_cells}"
+        "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad.nFeature} --mad.nCount {mad.nCount}"
 
 
 rule imagefix:
@@ -28,14 +28,16 @@ rule imagefix:
 
 rule imagetissue:
     input:
-        "data/{sample}/outs/spatial/tissue_lowres_image.png"
+        "data/{sample}/outs/spatial/tissue_hires_image.png"
     output:
-        "results/{sample}/TissueImage/{sample}.png"
+        "results/{sample}/TissueImage/{sample}.filtered.png",
+        "results/{sample}/TissueImage/{sample}.original.png"
+
     shell:
         """
         #convert {input} -colorspace HCL -channel R -evaluate set 67% +channel -colorspace sRGB {output}
-        workflow/scripts/saturation 0.4 {input} {output}
-
+        workflow/scripts/saturation 0.4 {input} {output[0]}
+        cp {input} {output[1]}
         """
 
 rule clustree:
