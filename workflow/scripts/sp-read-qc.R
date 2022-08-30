@@ -14,7 +14,7 @@ option_list = list(
     optparse::make_option(c("--mad.nCount"), type="double", default=3, 
               help="Filtering percentage [default= %default]", metavar="character"),
     optparse::make_option(c("--mad.nFeature"), type="double", default=3, 
-              help="Filtering percentage [default= %default]", metavar="character"),
+              help="Filtering percentage [default= %default]", metavar="character")
 
 
 )
