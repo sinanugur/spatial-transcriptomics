@@ -22,8 +22,8 @@ selection_method=config.get("selection_method","moransi") #
 
 
 #clustering and normalization paramaters
-normalization_method=config.get("normalization_method","LogNormalize")
-scale_factor=config.get("scale_factor",10000)
+#normalization_method=config.get("normalization_method","LogNormalize")
+#scale_factor=config.get("scale_factor",10000)
 resolution=[str(config.get("resolution",0.8))] #by default two resolution levels will be calculated
 
 #Differential expression paramaters

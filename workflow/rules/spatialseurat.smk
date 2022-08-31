@@ -14,6 +14,18 @@ rule rds:
         "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad_nFeature} --mad.nCount {mad_nCount}"
 
 
+rule spatialfeatureplot:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+    output:
+        heatmap="results/{sample}/technicals/SpatialFeature_nCount_Spatial.pdf",
+    shell:
+        """
+        workflow/scripts/sp-spatialfeatureplot.R --rds {input.rds} --sampleid {wildcards.sample}  --output {output}
+
+        """
+
 rule imagefix:
     input:
         "data/{sample}/outs/spatial/tissue_lowres_image.png"
@@ -118,3 +130,4 @@ rule spatialfeatures:
         workflow/scripts/sp-spatial-markers.R --rds {input.rds} --sampleid {wildcards.sample}  --output {output[0]} --selection.method {selection_method}
 
         """
+
