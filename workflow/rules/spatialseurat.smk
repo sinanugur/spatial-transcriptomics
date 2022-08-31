@@ -7,7 +7,7 @@ import os
 
 rule rds:
     input:
-        directory("data/{sample}/outs/")
+        directory(data_directory + "/{sample}/outs/")
     output:
         "analyses/raw/{sample}.rds"
     shell:
@@ -18,9 +18,9 @@ rule rds:
 
 rule imagefix:
     input:
-        "data/{sample}/outs/spatial/tissue_lowres_image.png"
+        data_directory + "/{sample}/outs/spatial/tissue_lowres_image.png"
     output:
-        "data/{sample}/outs/spatial/tissue_fixed.png"
+        "{data_directory}{sample}/outs/spatial/tissue_fixed.png"
 
     shell:
         """
@@ -31,7 +31,7 @@ rule imagefix:
 rule spatialfeatureplot:
     input:
         rds="analyses/raw/{sample}.rds",
-        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         heatmap="results/{sample}/technicals/SpatialFeature_nCount_Spatial.pdf",
     shell:
@@ -42,7 +42,7 @@ rule spatialfeatureplot:
 
 rule imagetissue:
     input:
-        "data/{sample}/outs/spatial/tissue_hires_image.png"
+        data_directory + "/{sample}/outs/spatial/tissue_hires_image.png"
     output:
         "results/{sample}/TissueImage/{sample}.filtered.png",
         "results/{sample}/TissueImage/{sample}.original.png"
@@ -73,7 +73,7 @@ rule normalization_pca_rds:
         "analyses/processed/{res}/{sample}.rds",
         "results/{sample}/resolution-{res}/{sample}.number-of-cells-per-cluster.xlsx"
     shell:
-        "workflow/scripts/sp-normalization-pca.R --rds {input} --sampleid {wildcards.sample} --normalization.method {normalization_method} --scale.factor {scale_factor} --nfeature {highly_variable_features} --resolution {wildcards.res}"
+        "workflow/scripts/sp-normalization-pca.R --rds {input} --sampleid {wildcards.sample} --nfeature {highly_variable_features} --resolution {wildcards.res}"
 
 
 rule umap_plot:
@@ -89,7 +89,7 @@ rule umap_plot:
 rule clustermarkers:
     input:
         rds="analyses/processed/{res}/{sample}.rds",
-        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx",
         "results/{sample}/resolution-{res}/{sample}.all-markers-forAllClusters.xlsx"
@@ -101,7 +101,7 @@ rule clustermarkers:
 rule selected_markers_plots:
     input:
         rds="analyses/processed/{res}/{sample}.rds",
-        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/resolution-{res}/selected-markers/selected-markers-dotplot.pdf",
         directory("results/{sample}/resolution-{res}/selected-markers/plots/")
@@ -122,7 +122,7 @@ rule positive_markers_plots:
 rule spatialfeatures:
     input:
         rds="analyses/raw/{sample}.rds",
-        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
+        imagefile= data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/spatial-markers/{sample}.spatial_markers.xlsx",
         directory("results/{sample}/spatial-markers/plots")

@@ -3,6 +3,8 @@ from yaml import load
 import os
 
 
+data_directory="data"
+
 files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")
 other_files, = glob_wildcards("analyses/raw/{sample}.rds")
 

@@ -2,16 +2,12 @@
 
 
 option_list = list(
-  optparse::make_option(c("--scale.factor"), type="integer", default=10000, 
-              help="Scale factor [default= %default]", metavar="character"),
   optparse::make_option(c("--nfeatures"), type="integer", default=2000, 
               help="Highly variable features [default= %default]", metavar="integer"),
     optparse::make_option(c("--rds"), type="character", default=NULL, 
               help="RAW rds file of a Seurat object", metavar="character"),
     optparse::make_option(c("--sampleid"), type="character", default=NULL, 
               help="Sample ID", metavar="character"),
-    optparse::make_option(c("--normalization.method"), type="character", default="LogNormalize", 
-              help="Normalization method[default= %default]", metavar="character"),
     optparse::make_option(c("--resolution"), type="double", default=0.8, 
               help="Resolution [default= %default]", metavar="character")
 
