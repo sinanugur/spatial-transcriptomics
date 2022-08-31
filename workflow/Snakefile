@@ -8,7 +8,7 @@ other_files = glob_wildcards("analyses/raw/{sample}.rds")
 
 try:
     print(list(other_files["sample"]))
-    files=files + other_files["sample"]
+    files=files + list(other_files["sample"])
 except:
     pass
 
