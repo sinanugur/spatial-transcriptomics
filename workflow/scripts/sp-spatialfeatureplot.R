@@ -34,8 +34,8 @@ function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
 
 
-plot1 <- VlnPlot(brain, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
-plot2 <- SpatialFeaturePlot(brain, features = "nCount_Spatial") + theme(legend.position = "right")
+plot1 <- VlnPlot(Spatial_Data, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
+plot2 <- SpatialFeaturePlot(Spatial_Data, features = "nCount_Spatial") + theme(legend.position = "right")
 wrap_plots(plot1, plot2) -> wp
 
 
