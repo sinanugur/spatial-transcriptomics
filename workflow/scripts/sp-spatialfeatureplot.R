@@ -26,6 +26,7 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 require(Seurat)
 require(tidyverse)
 require(viridis)
+require(patchwork)
 
 
 Spatial_Data=readRDS(opt$rds)
@@ -35,7 +36,7 @@ function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
 
 plot1 <- VlnPlot(Spatial_Data, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
-plot2 <- SpatialFeaturePlot(Spatial_Data, features = "nCount_Spatial") + theme(legend.position = "right")
+plot2 <- SpatialFeaturePlot(Spatial_Data, features = "nCount_Spatial") + theme(legend.position = "right") + scale_fill_continuous(type="viridis")
 wrap_plots(plot1, plot2) -> wp
 
 
