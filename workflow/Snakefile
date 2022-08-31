@@ -4,19 +4,15 @@ import os
 
 
 files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")
-other_files = glob_wildcards("analyses/raw/{sample}.rds")
+other_files, = glob_wildcards("analyses/raw/{sample}.rds")
 
-print(list(other_files["sample"]))
-try:
-    
-    files=files + list(other_files["sample"])
-except:
-    pass
 
+files=list(set(files+other_files))
 
 files=list(filter(lambda i: "/" not in i, files)) #do not capture subdirectories etc
 
 print(files)
+
 #QC paramaters
 min_cells=config.get("min_cells",3)
 min_features=config.get("min_features",200)
