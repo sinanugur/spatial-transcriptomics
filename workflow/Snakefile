@@ -3,10 +3,15 @@ from yaml import load
 import os
 
 
-files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")    
+files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")
+other_files = glob_wildcards("analyses/raw/{sample}.rds")
+
+files=set(files + other_files)
+
 
 files=list(filter(lambda i: "/" not in i, files)) #do not capture subdirectories etc
 
+print(files)
 #QC paramaters
 min_cells=config.get("min_cells",3)
 min_features=config.get("min_features",200)
@@ -62,7 +67,7 @@ elif route == "standard":
             expand("results/{sample}/clusteringTree/clusteringTree-{sample}.pdf",sample=files),
             expand(["results/{sample}/resolution-" + x + "/{sample}.positive-markers-forAllClusters.xlsx" for x in resolution],sample=files),
             #expand(["results/{sample}/resolution-" + x + "/{sample}.number-of-cells-per-cluster.xlsx" for x in resolution],sample=files),
-            expand("analyses/raw/{sample}.rds",sample=files),
+            #expand("analyses/raw/{sample}.rds",sample=files),
             expand("results/{sample}/spatial-markers/{sample}.spatial_markers.xlsx",sample=files),
             expand(["analyses/processed/" + x + "/{sample}.rds" for x in resolution],sample=files),
             expand(["results/{sample}/resolution-" + x + "/selected-markers/selected-markers-dotplot.pdf" for x in resolution],sample=files),
