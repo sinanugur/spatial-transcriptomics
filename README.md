@@ -10,7 +10,7 @@ This is a spatial transcriptomics analysis pipeline for Visium 10x platform. The
 Quick Start Example
 -------------------
 
-The workflow excepts Visum 10x samples under data folder in this format:
+The workflow expects Visum 10x samples under data folder in this format:
 
 __"data/{sample}/outs/filtered_feature_bc_matrix.h5"__
 
