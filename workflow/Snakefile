@@ -23,8 +23,8 @@ min_coverage=config.get("min_coverage",1000)
 highly_variable_features=config.get("highly_variable_features",2000)
 #doublet_filter=config.get("doublet_filter","T") #True:T or False:F
 
-mad_nCount=config.get("mad_nCount",3)
-mad_nFeature=config.get("mad_nFeature",3)
+mad_nCount=config.get("mad_nCount",100) # 3 before, 100 suggests unfiltering
+mad_nFeature=config.get("mad_nFeature",100)# 3 before
 selection_method=config.get("selection_method","moransi") #
 
 
