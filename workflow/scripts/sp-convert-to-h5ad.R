@@ -36,5 +36,5 @@ scrna@meta.data %>% dplyr::mutate(dplyr::across(where(is.factor), as.character))
 
 
 
-SaveH5Seurat(scrna,paste0(opt$output,".h5Seurat"))
-SeuratDisk::Convert(paste0(opt$output,".h5Seurat"), dest = "h5ad")
+SaveH5Seurat(scrna,paste0(opt$output,".h5Seurat"),overwrite = TRUE)
+SeuratDisk::Convert(paste0(opt$output,".h5Seurat"), dest = "h5ad",overwrite = TRUE)
