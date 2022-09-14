@@ -39,6 +39,14 @@ Spatial_Data=readRDS(opt$sprds)
 scrna_data=readRDS(opt$scrds)
 
 
+tryCatch(scrna_data[["SCT"]],error=function(e) {
+
+SCTransform(scrna_data) -> scrna_data 
+
+
+})
+
+
 function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
 
