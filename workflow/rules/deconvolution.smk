@@ -3,7 +3,8 @@
 rule seuratdecon:
     input:
         scrna="scrna/{datafile}.rds",
-        spatial="analyses/raw/{sample}.rds",
+        #spatial="analyses/raw/{sample}.rds",
+        spatial="analyses/processed/{res}/{sample}.rds", #seurat decon requires SCT transformation, add next time to the RAW rds
         imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/seurat/{sample}-{datafile}-seurat.pdf"
