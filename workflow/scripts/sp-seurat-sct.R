@@ -20,6 +20,7 @@ if (is.null(opt$rds) ){
 
 require(optparse)
 require(tidyverse)
+require(Seurat)
 
 
 Spatial_Data=readRDS(opt$rds)
