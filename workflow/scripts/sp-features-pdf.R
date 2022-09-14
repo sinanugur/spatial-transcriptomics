@@ -49,4 +49,4 @@ cell_types_all=tangram_csv  %>% column_to_rownames("X") %>% colnames()
 wp=seurat_plotting()
 
 
-ggsave(opt$output,wp,height=4*length(cell_types_all),width=7.5)
+ggsave(opt$output,wp,height=4*length(cell_types_all),width=7.5,limitsize = FALSE)
