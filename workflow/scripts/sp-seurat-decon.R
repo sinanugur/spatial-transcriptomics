@@ -59,7 +59,7 @@ anchors <- FindTransferAnchors(reference = reference, query = query, normalizati
 k.anchor = anc,
 k.score = params$k.score,
 k.filter=params$k.filter,
-n.trees = params$n.trees)
+n.trees = params$n.trees,recompute.residuals = FALSE)
 
 predictions.assay <- TransferData(anchorset = anchors, refdata = reference$seurat_clusters, prediction.assay = TRUE)
 query[["predictions"]] <- predictions.assay
