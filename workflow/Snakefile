@@ -6,10 +6,10 @@ import os
 data_directory="data"
 
 files, = glob_wildcards("data/{sample}/outs/filtered_feature_bc_matrix.h5")
-other_files, = glob_wildcards("analyses/raw/{sample}.rds")
+#other_files, = glob_wildcards("analyses/raw/{sample}.rds")
 
 
-files=list(set(files+other_files))
+#files=list(set(files+other_files))
 
 files=list(filter(lambda i: "/" not in i, files)) #do not capture subdirectories etc
 
