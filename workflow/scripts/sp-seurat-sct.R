@@ -25,9 +25,9 @@ require(Seurat)
 
 Spatial_Data=readRDS(opt$rds)
 
+UpdateSeuratObject(Spatial_Data) -> Spatial_Data
 
 SCTransform(Spatial_Data,assay = "Spatial") -> Spatial_Data
-
 
 DefaultAssay(Spatial_Data) <- "Spatial"
 
