@@ -7,11 +7,14 @@ import os
 
 rule rds:
     input:
-        directory(data_directory + "/{sample}/outs/")
+        #directory(data_directory + "/{sample}/outs/")
+        data_directory + "/{sample}/outs/filtered_feature_bc_matrix.h5"
     output:
         "analyses/raw/{sample}.rds"
+    params:
+        d=data_directory + "/{sample}/outs/"
     shell:
-        "workflow/scripts/sp-read-qc.R --data.dir {input} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad_nFeature} --mad.nCount {mad_nCount}"
+        "workflow/scripts/sp-read-qc.R --data.dir {params.d} --output {output} --sampleid {wildcards.sample} --percent.mt {percent_mt} --mad.nFeature {mad_nFeature} --mad.nCount {mad_nCount}"
 
 
 
@@ -30,13 +33,12 @@ rule imagefix:
 
 rule spatialfeatureplot:
     input:
-        rds="analyses/raw/{sample}.rds",
-        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
+        rds="analyses/raw/{sample}.rds"
     output:
-        heatmap="results/{sample}/technicals/SpatialFeature_nCount_Spatial.pdf",
+        heatmap="results/{sample}/technicals/SpatialFeature_QC.pdf",
     shell:
         """
-        workflow/scripts/sp-spatialfeatureplot.R --rds {input.rds} --sampleid {wildcards.sample}  --output {output}
+        workflow/scripts/sp-spatialfeatureplot.R --rds {input.rds} --output {output}
 
         """
 

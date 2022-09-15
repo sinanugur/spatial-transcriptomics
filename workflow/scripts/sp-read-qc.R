@@ -14,7 +14,9 @@ option_list = list(
     optparse::make_option(c("--mad.nCount"), type="double", default=3, 
               help="Filtering percentage [default= %default]", metavar="character"),
     optparse::make_option(c("--mad.nFeature"), type="double", default=3, 
-              help="Filtering percentage [default= %default]", metavar="character")
+              help="Filtering percentage [default= %default]", metavar="character"),
+    optparse::make_option(c("--output"), type="character", default="output.rds", 
+              help="Output RDS file name", metavar="character")
 
 
 )
@@ -88,7 +90,10 @@ VlnPlot(scrna, features = c("nFeature_Spatial", "nCount_Spatial", "percent.mt","
 ggsave(paste0(output.dir,"after-qc-trimming-violinplot.pdf"), width = 10,height = 4)
 
 
-output.dir=paste0("analyses/raw/")
-dir.create(output.dir,recursive = T)
+#output.dir=paste0("analyses/raw/")
+#dir.create(output.dir,recursive = T)
 
-saveRDS(scrna,file = paste0(output.dir,opt$sampleid,".rds"))
+scrna <- SCTransform(scrna,assay = "Spatial",verbose = FALSE)
+DefaultAssay(scrna) <- "Spatial"
+
+saveRDS(scrna,file = opt$output)
