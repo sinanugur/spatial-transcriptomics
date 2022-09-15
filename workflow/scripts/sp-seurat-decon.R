@@ -53,7 +53,9 @@ DefaultAssay(scrna_data) <- "SCT"
 
 function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
-DefaultAssay(Spatial_Data) <- "SCT"
+UpdateSeuratObject(Spatial_Data) -> Spatial_Data
+
+#DefaultAssay(Spatial_Data) <- "SCT"
 
 
 function_decon_seurat = function(reference,query,anc){
