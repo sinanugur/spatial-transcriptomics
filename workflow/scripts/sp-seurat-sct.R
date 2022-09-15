@@ -26,7 +26,10 @@ require(Seurat)
 Spatial_Data=readRDS(opt$rds)
 
 
-CreateSeuratObject(Spatial_Data[["Spatial"]],assay="Spatial") -> Spatial_Data
+
+CreateSeuratObject(Spatial_Data[["Spatial"]],assay="Spatial") -> Spatial_Data_tmp
+
+Spatial_Data_tmp@images <- Spatial_Data@images
 
 SCTransform(Spatial_Data,assay = "Spatial") -> Spatial_Data
 
