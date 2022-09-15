@@ -31,8 +31,8 @@ CreateSeuratObject(Spatial_Data[["Spatial"]],assay="Spatial") -> Spatial_Data_tm
 
 Spatial_Data_tmp@images <- Spatial_Data@images
 
-SCTransform(Spatial_Data,assay = "Spatial") -> Spatial_Data
+SCTransform(Spatial_Data_tmp,assay = "Spatial") -> Spatial_Data_tmp
 
-DefaultAssay(Spatial_Data) <- "Spatial"
+DefaultAssay(Spatial_Data_tmp) <- "Spatial"
 
-saveRDS(Spatial_Data,file = opt$output)
+saveRDS(Spatial_Data_tmp,file = opt$output)
