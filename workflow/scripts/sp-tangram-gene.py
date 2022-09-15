@@ -33,8 +33,8 @@ else:
 
 ad_ge = tg.project_genes(ad_map, adata_sc)
 
-with open("ad_ge.pkl","wb") as p:
-    pickle.dump(ad_ge,p)
+#with open("ad_ge.pkl","wb") as p:
+#    pickle.dump(ad_ge,p)
 
 genes=["LYVE1","F13A1","FOLR2","SELENOP","APOE","SLC40A1","C1QB","DAB2","PDK4","SPP1","ACP5","CD9","FCER1A","CD1C","CLEC10A","HSPA6","DNAJB1",
        "HSPA1B","S100A8","S100A9","S100A12","EREG","G0S2","FCN1","CCL20","IL1B","IL23A","CXCL10","CXCL9","GBP1","CDC1C","CCL3L1",
