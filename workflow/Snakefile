@@ -86,6 +86,13 @@ elif route == "clustree" or route == "clusteringTree":
         input:
             expand("results/{sample}/clusteringTree/clusteringTree-{sample}.pdf",sample=files)
 
+elif  route == "bayesspace":
+    rule bayes:
+        input:
+            expand("analyses/bayesspace/{sample}.sce.enhanced.rds",sample=files),
+            expand("results/{sample}/bayesspace/{sample}.cluster_plot.pdf",sample=files),
+            expand("results/{sample}/bayesspace/plots/",sample=files)
+            
 
 elif route == "decon":
     scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
