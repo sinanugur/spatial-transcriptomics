@@ -61,7 +61,8 @@ test=function(x,y) { angles=atan2(y,x)*180/pi
   }
 
 n=attr(sce,"q.logliks") %>% as.data.frame() %>% select(q,loglik) %>% mutate(lo=(-1*loglik)/1000) %>% mutate(x1=q,y1=lo,x2=lag(q,order_by = q),y2=lag(lo,order_by = q),x3=lead(q,order_by = q),y3=lead(lo,order_by = q)) %>% 
-rowwise() %>% mutate(ang=test(c(x2-x1,x3-x1),c(y2-y1,y3-y1))) %>% ungroup() %>% dplyr::filter( row_number() < dplyr::first(which(ang < 0))) %>% dplyr::filter(ang >0) %>% dplyr::slice_min(order_by = ang,n=1) %>% pull(q)
+rowwise() %>% mutate(ang=test(c(x2-x1,x3-x1),c(y2-y1,y3-y1))) %>% ungroup() %>%
+{if(any(.$ang < 0)) dplyr::filter(.,row_number() < dplyr::first(which(ang < 0))) else .} %>% dplyr::filter(ang >0) %>% dplyr::slice_min(order_by = ang,n=1) %>% pull(q)
 
 
 }
