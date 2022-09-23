@@ -29,7 +29,7 @@ rule bayesspace:
     params:
         d=data_directory + "/{sample}/outs/"
     shell:
-        "workflow/scripts/sp-bayesspace.R --data.dir {params.d} --output.sce {output.sce} --output.enhanced {output.enhanced} --cluster.plot {output.clusterplot} --qplot {output.qplot}"
+        "workflow/scripts/sp-bayesspace.R --pca.dimension {bayesspace_pca_dimension} --data.dir {params.d} --output.sce {output.sce} --output.enhanced {output.enhanced} --cluster.plot {output.clusterplot} --qplot {output.qplot}"
 
 rule bayesspaceplots:
     input:

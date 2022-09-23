@@ -50,6 +50,7 @@ integration_id=config.get("integration_id","combined")
 integration_resolution=str(config.get("resolution",0.8))
 celltypist_model=config.get("celltypist_model","Immune_All_Low.pkl")
 
+bayesspace_pca_dimension=config.get("bayesspace_pca_dimension",15)
 
 
 def get_mem_mb(wildcards, threads):

@@ -12,7 +12,10 @@ option_list = list(
     optparse::make_option(c("--qplot"), type="character", default="qplot.pdf", 
               help="Qplot filename", metavar="character"),
     optparse::make_option(c("--cluster.plot"), type="character", default="cluster.plot.pdf", 
-              help="Cluster plot filename", metavar="character")
+              help="Cluster plot filename", metavar="character"),
+    optparse::make_option(c("--n.cluster"), type="character", default=NULL, 
+              help="Number of clusters, if not given, autoselect", metavar="integer")
+    
 
 
 )
@@ -49,9 +52,23 @@ sce <- qTune(sce, qs=seq(2, 15), platform="Visium", d=opt$pca.dimension,gamma=3)
 qPlot(sce)
 ggsave(filename=opt$qplot)
 
+n=opt$n.cluster
+if(is.null(n)) {
 
-n=(attr(sce,"q.logliks") %>% as.data.frame() %>% mutate(diff=(loglik-lag(loglik))) %>% filter(diff == max(diff,na.rm = T)) %>% pull(q)) + 1
+test=function(x,y) { angles=atan2(y,x)*180/pi
+  
+  return(angles[1] - angles[2])
+  }
 
+n=attr(sce,"q.logliks") %>% as.data.frame() %>% select(q,loglik) %>% mutate(lo=(-1*loglik)/1000) %>% mutate(x1=q,y1=lo,x2=lag(q,order_by = q),y2=lag(lo,order_by = q),x3=lead(q,order_by = q),y3=lead(lo,order_by = q)) %>% 
+rowwise() %>% mutate(ang=test(c(x2-x1,x3-x1),c(y2-y1,y3-y1))) %>% ungroup() %>% dplyr::filter( row_number() < dplyr::first(which(ang < 0))) %>% dplyr::filter(ang >0) %>% dplyr::slice_min(order_by = ang,n=1) %>% pull(q)
+
+
+}
+
+
+print("cluster:")
+print(n)
 set.seed(149)
 sce <- spatialCluster(sce, q=n, platform="Visium", d=opt$pca.dimension,
                            init.method="mclust", model="t", gamma=3,
