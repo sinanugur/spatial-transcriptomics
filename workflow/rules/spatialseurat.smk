@@ -43,7 +43,7 @@ rule imagefix:
     input:
         data_directory + "/{sample}/outs/spatial/tissue_lowres_image.png"
     output:
-        "{data_directory}{sample}/outs/spatial/tissue_fixed.png"
+        data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
 
     shell:
         """
