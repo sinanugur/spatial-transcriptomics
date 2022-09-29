@@ -16,7 +16,7 @@ option_list = list(
     optparse::make_option(c("--n.cluster"), type="character", default=NULL, 
               help="Number of clusters, if not given, autoselect", metavar="integer"),
     optparse::make_option(c("--sampleid"), type="character", default=NULL, 
-              help="Sample ID", metavar="character"),
+              help="Sample ID", metavar="character")
     
 
 
