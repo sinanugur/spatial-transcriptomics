@@ -14,7 +14,9 @@ option_list = list(
     optparse::make_option(c("--cluster.plot"), type="character", default="cluster.plot.pdf", 
               help="Cluster plot filename", metavar="character"),
     optparse::make_option(c("--n.cluster"), type="character", default=NULL, 
-              help="Number of clusters, if not given, autoselect", metavar="integer")
+              help="Number of clusters, if not given, autoselect", metavar="integer"),
+    optparse::make_option(c("--sampleid"), type="character", default=NULL, 
+              help="Sample ID", metavar="character"),
     
 
 
@@ -79,7 +81,7 @@ sce <- spatialCluster(sce, q=n, platform="Visium", d=opt$pca.dimension,
                            save.chain=TRUE)
 
 
-
+sce$sample_name <- opt$sampleid
 
 
 set.seed(149)
@@ -101,6 +103,7 @@ sce_enhanced <- enhanceFeatures(sce_enhanced, sce,
                                      nrounds=0)
 
 
+sce_enhanced$sample_name <- opt$sampleid
 
 saveRDS(sce,opt$output.sce)
 saveRDS(sce_enhanced,opt$output.enhanced)
