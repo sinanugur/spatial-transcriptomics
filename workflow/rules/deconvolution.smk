@@ -124,3 +124,13 @@ rule cell2loc_pdf:
         """
         workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
         """  
+
+rule bayesspace_integrate:
+    input:
+        expand("analyses/bayesspace/{sample}.sce.rds",sample=files)
+    output:
+        "analyses/integration/bayesspace/" + integration_id + "_bayesspace.rds"
+    shell:
+        """
+        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output}
+        """

@@ -39,6 +39,10 @@ rule bayesspaceplots:
     shell:
         "workflow/scripts/sp-bayesspace-feature-plot.R --input {input} --sampleid {wildcards.sample}"
 
+
+
+
+
 rule imagefix:
     input:
         data_directory + "/{sample}/outs/spatial/tissue_lowres_image.png"
