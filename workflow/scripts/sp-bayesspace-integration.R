@@ -22,8 +22,8 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 require(optparse)
 require(tidyverse)
 require(Seurat)
-require(patchwork)
 require(BayesSpace)
+require(scater)
 
 
 
