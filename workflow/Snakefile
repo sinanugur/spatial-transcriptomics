@@ -94,7 +94,7 @@ elif  route == "bayesspace":
             expand("results/{sample}/bayesspace/{sample}.cluster_plot.pdf",sample=files),
             expand("results/{sample}/bayesspace/plots/",sample=files)
             
-elif route = "integrate":
+elif route == "integrate":
     files, = glob_wildcards("analyses/bayesspace/{sample}.sce.rds")
     rule all:
         input:
