@@ -10,7 +10,7 @@ option_list = list(
     optparse::make_option(c("--umap.plot"), type="character", default="umap.plot.pdf", 
               help="UMAP plot file name", metavar="character"),
     optparse::make_option(c("--harmony.plot"), type="character", default="harmony.plot.pdf", 
-              help="Harmony pplot file name", metavar="character"),
+              help="Harmony pplot file name", metavar="character")
 
 
     
@@ -73,5 +73,14 @@ ggplot(data.frame(reducedDim(sce.combined, "UMAP")) %>% dplyr::mutate(sample=fac
 
 ggsave(filename = opt$umap.plot,p1)
 
+sce.combined = RunHarmony(sce.combined, "sample_name", verbose = F)
+sce.combined = runUMAP(sce.combined, dimred = "HARMONY", name = "UMAP.HARMONY")
+colnames(reducedDim(sce.combined, "UMAP.HARMONY")) = c("UMAP1", "UMAP2")
+
+ggplot(data.frame(reducedDim(sce.combined, "UMAP.HARMONY")) %>% dplyr::mutate(sample=factor(sce.combined$sample_name)), 
+       aes(x = UMAP1, y = UMAP2, color = sample)) +
+  geom_point() +
+  labs(color = "Sample") +
+  theme_bw() + facet_wrap(~sample,ncol = 4)
 
 saveRDS(sce.combined,file= opt$output)

@@ -131,9 +131,10 @@ rule bayesspace_integrate:
     output:
         rds="analyses/integration/bayesspace/" + integration_id + "_bayesspace.rds",
         umap="results/integration/bayesspace/" + integration_id + ".umap_before_integration.df",
+        harmony="results/integration/bayesspace/" + integration_id + ".umap_after_integration.df",
 
 
     shell:
         """
-        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap}
+        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony}
         """
