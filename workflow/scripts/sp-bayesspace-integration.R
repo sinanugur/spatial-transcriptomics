@@ -6,7 +6,14 @@ option_list = list(
     optparse::make_option(c("-r","--rds"), type="character", default=NULL, 
               help="A list of RDS files of Seurat objects", metavar="character"),
     optparse::make_option(c("--output"), type="character", default=NULL, 
-              help="Output RDS file name", metavar="character")
+              help="Output RDS file name", metavar="character"),
+    optparse::make_option(c("--umap.plot"), type="character", default="umap.plot.pdf", 
+              help="UMAP plot file name", metavar="character"),
+    optparse::make_option(c("--harmony.plot"), type="character", default="harmony.plot.pdf", 
+              help="Harmony pplot file name", metavar="character"),
+
+
+    
 
 
 )
@@ -24,6 +31,7 @@ require(tidyverse)
 require(Seurat)
 require(BayesSpace)
 require(scater)
+require(harmony)
 
 
 
@@ -53,4 +61,17 @@ for(i in files) {
 #Combine into 1 SCE and preprocess
 sce.combined = spatialPreprocess(sce.combined, n.PCs = 25,platform="Visium") #lognormalize, PCA
 sce.combined =  runUMAP(sce.combined, dimred = "PCA")
+
+colnames(reducedDim(sce.combined, "UMAP")) = c("UMAP1", "UMAP2")
+
+
+ggplot(data.frame(reducedDim(sce.combined, "UMAP")) %>% dplyr::mutate(sample=factor(sce.combined$sample_name)), 
+       aes(x = UMAP1, y = UMAP2, color = sample)) +
+  geom_point() +
+  labs(color = "Sample") +
+  theme_bw() + facet_wrap(~sample) -> p1
+
+ggsave(filename = opt$umap.plot,p1)
+
+
 saveRDS(sce.combined,file= opt$output)
