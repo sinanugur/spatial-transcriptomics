@@ -83,6 +83,6 @@ ggplot(data.frame(reducedDim(sce.combined, "UMAP.HARMONY")) %>% dplyr::mutate(sa
   labs(color = "Sample") +
   theme_bw() + facet_wrap(~sample,ncol = 4) -> p2
 
-ggsave(filename = opt$harmony.plot,p1)
+ggsave(filename = opt$harmony.plot,p2)
 
 saveRDS(sce.combined,file= opt$output)

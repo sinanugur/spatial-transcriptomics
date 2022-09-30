@@ -130,8 +130,8 @@ rule bayesspace_integrate:
         expand("analyses/bayesspace/{sample}.sce.rds",sample=files)
     output:
         rds="analyses/integration/bayesspace/" + integration_id + "_bayesspace.rds",
-        umap="results/integration/bayesspace/" + integration_id + ".umap_before_integration.df",
-        harmony="results/integration/bayesspace/" + integration_id + ".umap_after_integration.df",
+        umap="results/integration/bayesspace/" + integration_id + ".umap_before_integration.pdf",
+        harmony="results/integration/bayesspace/" + integration_id + ".umap_after_integration.pdf",
 
 
     shell:
