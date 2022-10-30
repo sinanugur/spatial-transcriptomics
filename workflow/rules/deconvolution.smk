@@ -138,3 +138,49 @@ rule bayesspace_integrate:
         """
         workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony}
         """
+
+
+rule giotto_dwls:
+    input:
+        scrna="scrna/{datafile}.rds",
+        spatial="analyses/raw/{sample}.rds"
+    output:
+        "analyses/dwls/{datafile}/{sample}.csv"
+    shell:
+        """
+        workflow/scripts/sp-giotto-dwls.R --sprds {input.spatial} --scrds {input.scrna} --output {output}
+        """
+
+
+rule rctd_decon:
+    input:
+        scrna="scrna/{datafile}.rds",
+        spatial="analyses/raw/{sample}.rds"
+    output:
+        "analyses/rctd/{datafile}/{sample}.csv"
+    shell:
+        """
+        workflow/scripts/sp-rctd.R --sprds {input.spatial} --scrds {input.scrna} --output {output}
+        """
+
+rule rctd_pdf:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        csv="analyses/rctd/{datafile}/{sample}.csv"
+    output:
+        "results/{sample}/deconvolution/rctd/{sample}-{datafile}-rctd.pdf"
+    shell:
+        """
+        workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
+        """  
+
+rule dwls_pdf:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        csv="analyses/cell2location/{datafile}/{sample}.csv"
+    output:
+        "results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf"
+    shell:
+        """
+        workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
+        """  

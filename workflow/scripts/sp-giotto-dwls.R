@@ -4,11 +4,10 @@ option_list = list(
 
     optparse::make_option(c("--sprds"), type="character", default=NULL, 
               help="Processed rds file of a spatial object", metavar="character"),
-
     optparse::make_option(c("--scrds"), type="character", default=NULL, 
               help="Processed rds file of a single cell object", metavar="character"),
-        optparse::make_option(c("--output"), type="character", default="output.rds", 
-              help="Output RDS file name", metavar="character")
+        optparse::make_option(c("--output"), type="character", default="output.csv", 
+              help="Output CSV file name", metavar="character")
 
 
 
@@ -17,9 +16,9 @@ option_list = list(
 opt_parser = optparse::OptionParser(option_list=option_list)
 opt = optparse::parse_args(opt_parser)
 
-if (is.null(opt$data.dir)){
+if (is.null(opt$sprds)){
   optparse::print_help(opt_parser)
-  stop("At least one argument must be supplied (data.dir and sampleid)", call.=FALSE)
+  stop("At least one argument must be supplied (sprds)", call.=FALSE)
 }
 
 require(optparse)
@@ -36,9 +35,12 @@ scrna_data=readRDS(opt$scrds)
 
 
 
-python_path=system("which python",intern=T)
+#python_path=system("which python",intern=T)
 
-instrs = createGiottoInstructions(python_path = python_path)
+#instrs = createGiottoInstructions(python_path = python_path)
+
+instrs = createGiottoInstructions()
+
 
 st_data <- createGiottoObject(
     raw_exprs = Spatial_Data@assays$Spatial@counts,
@@ -89,6 +91,6 @@ st_data <- runDWLSDeconv(st_data,sign_matrix = Sig_exp, n_cell = 20)
 
 
 
+#DWLS <- CreateAssayObject(st_data@spatial_enrichment$DWLS %>% column_to_rownames("cell_ID") %>% t())
 DWLS <- CreateAssayObject(st_data@spatial_enrichment$DWLS %>% column_to_rownames("cell_ID") %>% t())
-
-saveRDS(DWLS,file = opt$output)
+write.csv(DWLS,file = opt$output)

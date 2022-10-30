@@ -119,6 +119,12 @@ elif route == "tangram":
         input:
             expand("results/{sample}/deconvolution/tangram/{sample}-{datafile}-tangram.pdf",datafile=scrnadatafiles,sample=files)
 
+elif route == "rctd":
+    scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
+    rule rctd:
+        input:
+            expand("results/{sample}/deconvolution/rctd/{sample}-{datafile}-rctd.pdf",datafile=scrnadatafiles,sample=files)
+
 elif route == "tangramgene":
     scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
     rule tangramgene:
