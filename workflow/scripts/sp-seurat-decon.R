@@ -39,23 +39,13 @@ Spatial_Data=readRDS(opt$sprds)
 scrna_data=readRDS(opt$scrds)
 
 
-tryCatch(scrna_data[["SCT"]],error=function(e) {
-
-SCTransform(scrna_data) -> scrna_data 
-
-return(scrna_data)
-
-}) -> scrna_data
-
-DefaultAssay(scrna_data) <- "SCT"
-
 
 
 function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
 
 
-#DefaultAssay(Spatial_Data) <- "SCT"
+DefaultAssay(Spatial_Data) <- "SCT"
 
 
 function_decon_seurat = function(reference,query,anc){
@@ -64,7 +54,7 @@ anchors <- FindTransferAnchors(reference = reference, query = query, normalizati
 k.anchor = anc,
 k.score = params$k.score,
 k.filter=params$k.filter,
-n.trees = params$n.trees,recompute.residuals = FALSE)
+n.trees = params$n.trees)
 
 predictions.assay <- TransferData(anchorset = anchors, refdata = reference$seurat_clusters, prediction.assay = TRUE)
 query[["predictions"]] <- predictions.assay

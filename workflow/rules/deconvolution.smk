@@ -1,18 +1,27 @@
 
 
 
-rule scttransform:
+rule scttransform_spatial:
     input:
-        rds="analyses/raw/{sample}.rds",
+        spatial="analyses/raw/{sample}.rds",
     output:
         "analyses/sct/{sample}.rds"
     shell:
-        "workflow/scripts/sp-seurat-sct.R --rds {input.rds} --output {output}"
+        "workflow/scripts/sp-seurat-sct.R --rds {input.spatial} --output {output} --assay Spatial"  
 
+
+rule scttransform_scrna:
+    input:
+        scrna="scrna/{datafile}.rds",
+    output:
+        sct="analyses/sct_scrna/{datafile}.rds",
+        xlsx="analyses/sct_scrna/{datafile}.cluster_markers.xlsx"
+    shell:
+        "workflow/scripts/sp-seurat-sct.R --rds {input.scrna} --output {output.sct} --assay RNA --output.xlsx {output.xlsx} "  
 
 rule seuratdecon:
     input:
-        scrna="scrna/{datafile}.rds",
+        scrna="analyses/sct_scrna/{datafile}.rds",
         spatial="analyses/sct/{sample}.rds",
         imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
