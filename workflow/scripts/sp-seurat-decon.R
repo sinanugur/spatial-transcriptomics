@@ -82,4 +82,4 @@ cell_types_all=Idents(scrna_data) %>% unique() %>% as.character()
 
 wp=seurat_plotting()
 
-ggsave(opt$output,wp,height=18,width=8)
+ggsave(opt$output,wp,height=3.5*length(cell_types_all)/2,width=6,limitsize = FALSE,scale=0.9)
