@@ -125,6 +125,12 @@ elif route == "rctd":
         input:
             expand("results/{sample}/deconvolution/rctd/{sample}-{datafile}-rctd.pdf",datafile=scrnadatafiles,sample=files)
 
+elif route == "spotlight":
+    scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
+    rule spotlight:
+        input:
+            expand("results/{sample}/deconvolution/spotlight/{sample}-{datafile}-spotlight.pdf",datafile=scrnadatafiles,sample=files)
+
 elif route == "tangramgene":
     scrnadatafiles, = glob_wildcards("scrna/{datafile}.rds")
     rule tangramgene:

@@ -7,7 +7,9 @@ option_list = list(
     optparse::make_option(c("--scrds"), type="character", default=NULL, 
               help="Processed rds file of a single cell object", metavar="character"),
         optparse::make_option(c("--output"), type="character", default="output.csv", 
-              help="Output CSV file name", metavar="character")
+              help="Output CSV file name", metavar="character"),
+    optparse::make_option(c("--input.xlsx"), type="character", 
+              help="Input Excel file name for cluster markers", metavar="character")
 
 
 
@@ -35,7 +37,7 @@ scrna_data=readRDS(opt$scrds)
 
 
 
-openxlsx::read.xlsx(paste0("scrna/",scrnaID,".cluster_markers.xlsx")) -> cluster_markers_all
+openxlsx::read.xlsx(opt$input.xlsx) -> cluster_markers_all
 
 function_spotlight=function(Seurat_Object,scrna_rds) {
 set.seed(123)
@@ -45,7 +47,7 @@ spotlight_ls <- spotlight_deconvolution(
   counts_spatial = Seurat_Object@assays$Spatial@counts,
   clust_vr = "seurat_clusters", # Variable in sc_seu containing the cell-type annotation
   cluster_markers = cluster_markers_all, # Dataframe with the marker genes
-  cl_n = 100, # number of cells per cell type to use
+  cl_n = 300, # number of cells per cell type to use #default is 100
   hvg = 3000, # Number of HVG to use
   ntop = NULL, # How many of the marker genes to use (by default all)
   transf = "uv", # Perform unit-variance scaling per cell and spot prior to factorzation and NLS
@@ -61,17 +63,15 @@ decon_mtrx <- cbind(decon_mtrx_sub, "res_ss" = decon_mtrx[, "res_ss"])
 rownames(decon_mtrx) <- colnames(Seurat_Object)
 
 decon_df <- decon_mtrx %>%
-  data.frame() %>%
-  tibble::rownames_to_column("barcodes")
+  data.frame()
+  #tibble::rownames_to_column("barcodes")
 
-Seurat_Object@meta.data <- Seurat_Object@meta.data %>%
-  tibble::rownames_to_column("barcodes") %>%
-  dplyr::left_join(decon_df, by = "barcodes") %>%
-  tibble::column_to_rownames("barcodes")
+#Seurat_Object@meta.data <- Seurat_Object@meta.data %>% tibble::rownames_to_column("barcodes") %>% dplyr::left_join(decon_df, by = "barcodes") %>% tibble::column_to_rownames("barcodes")
 
-return(Seurat_Object)
+#return(Seurat_Object)
+return(decon_df)
 }
 
-function_spotlight(Spatial_Data,scrna_data) -> Spatial_Data
+function_spotlight(Spatial_Data,scrna_data) -> decon_df
 
-saveRDS(Spatial_Data,file = paste0("rds_decon/",scrnaID,"/",sampleID,".rds"))
+write.csv(decon_df,file = opt$output)

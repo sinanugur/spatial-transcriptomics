@@ -19,6 +19,31 @@ rule scttransform_scrna:
     shell:
         "workflow/scripts/sp-seurat-sct.R --rds {input.scrna} --output {output.sct} --assay RNA --output.xlsx {output.xlsx} "  
 
+
+rule spotlight_decon:
+    input:
+        scrna="scrna/{datafile}.rds",
+        spatial="analyses/raw/{sample}.rds",
+        xlsx="analyses/sct_scrna/{datafile}.cluster_markers.xlsx"
+    output:
+        "analyses/spotlight/{datafile}/{sample}.csv"
+    shell:
+        """
+        workflow/scripts/sp-spotlight.R --sprds {input.spatial} --scrds {input.scrna} --input.xlsx {input.xlsx} --output {output}
+
+        """
+
+rule spotlight_pdf:
+    input:
+        rds="analyses/raw/{sample}.rds",
+        csv="analyses/spotlight/{datafile}/{sample}.csv"
+    output:
+        "results/{sample}/deconvolution/spotlight/{sample}-{datafile}-spotlight.pdf"
+    shell:
+        """
+        workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
+        """   
+
 rule seuratdecon:
     input:
         scrna="analyses/sct_scrna/{datafile}.rds",
