@@ -47,7 +47,7 @@ spotlight_ls <- spotlight_deconvolution(
   counts_spatial = Seurat_Object@assays$Spatial@counts,
   clust_vr = "seurat_clusters", # Variable in sc_seu containing the cell-type annotation
   cluster_markers = cluster_markers_all, # Dataframe with the marker genes
-  cl_n = 300, # number of cells per cell type to use #default is 100
+  cl_n = 100, # number of cells per cell type to use #default is 100
   hvg = 3000, # Number of HVG to use
   ntop = NULL, # How many of the marker genes to use (by default all)
   transf = "uv", # Perform unit-variance scaling per cell and spot prior to factorzation and NLS
@@ -63,7 +63,7 @@ decon_mtrx <- cbind(decon_mtrx_sub, "res_ss" = decon_mtrx[, "res_ss"])
 rownames(decon_mtrx) <- colnames(Seurat_Object)
 
 decon_df <- decon_mtrx %>%
-  data.frame()
+  data.frame() %>% select(-res_ss)
   #tibble::rownames_to_column("barcodes")
 
 #Seurat_Object@meta.data <- Seurat_Object@meta.data %>% tibble::rownames_to_column("barcodes") %>% dplyr::left_join(decon_df, by = "barcodes") %>% tibble::column_to_rownames("barcodes")
