@@ -45,7 +45,7 @@ rule bayesspaceplots:
 
 rule imagefix:
     input:
-        data_directory + "/{sample}/outs/spatial/tissue_lowres_image.png"
+        data_directory + "/{sample}/outs/spatial/tissue_hires_image.png"
     output:
         data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
 
@@ -104,7 +104,8 @@ rule normalization_pca_rds:
 
 rule umap_plot:
     input:
-        rds="analyses/processed/{res}/{sample}.rds"
+        rds="analyses/processed/{res}/{sample}.rds",
+        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/resolution-{res}/{sample}.umap.pdf"
     shell:
@@ -114,8 +115,7 @@ rule umap_plot:
     
 rule clustermarkers:
     input:
-        rds="analyses/processed/{res}/{sample}.rds",
-        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
+        rds="analyses/processed/{res}/{sample}.rds"
     output:
         "results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx",
         "results/{sample}/resolution-{res}/{sample}.all-markers-forAllClusters.xlsx"

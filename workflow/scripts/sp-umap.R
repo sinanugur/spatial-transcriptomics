@@ -25,18 +25,22 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 
 require(Seurat)
 require(tidyverse)
+require(patchwork)
 
 
 source("workflow/scripts/scrna-functions.R")
 
-scrna=readRDS(file = opt$rds)
+Spatial_Data=readRDS(file = opt$rds)
 
-p1 <- DimPlot(scrna, reduction = "umap", label = TRUE,label.size = 10) 
+function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
+
+p1 <- DimPlot(Spatial_Data, reduction = "umap", label = TRUE,label.size = 5) 
+p2 <- SpatialDimPlot(Spatial_Data, label = TRUE, label.size = 5,images=paste0("image"),pt.size.factor=1.6)
 
 
 
 output.dir=paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/")
 dir.create(output.dir,recursive = T)
 
-ggsave(plot =p1,filename=paste0(output.dir,opt$sampleid,".umap",".pdf"),width=13,height=7)
+ggsave(plot =p1 + p2,filename=paste0(output.dir,opt$sampleid,".umap",".pdf"),width=15,height=6.5)
 

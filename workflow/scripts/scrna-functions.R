@@ -42,10 +42,14 @@ return(tab)
 
 function_image_fixer=function(Spatial_Data,sampleID) {
 
-  IMAGE=Read10X_Image(image.dir=paste0("data/",sampleID,"/outs/spatial"),image.name="tissue_fixed.png")
+  IMAGE=Read10X_Image(image.dir=paste0("data/",sampleID,"/outs/spatial"),image.name="tissue_hires_image.png")
 
 
 IMAGE@coordinates[Spatial_Data@images$slice1@coordinates %>% rownames(),] -> IMAGE@coordinates
+
+IMAGE@scale.factors$lowres = IMAGE@scale.factors$hires
+
+
 
 
 Spatial_Data@images$"image" <- IMAGE
