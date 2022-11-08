@@ -216,10 +216,10 @@ rule rctd_pdf:
 rule dwls_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/cell2location/{datafile}/{sample}.csv",
+        csv="analyses/dwls/{datafile}/{sample}.csv",
         imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
-        "results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf"
+        "results/{sample}/deconvolution/dwls/{sample}-{datafile}-dwls.pdf"
     shell:
         """
         workflow/scripts/sp-features-pdf.R --rds {input.rds} --csv {input.csv} --output {output} --sampleid {wildcards.sample}
