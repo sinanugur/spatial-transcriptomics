@@ -31,7 +31,7 @@ Spatial_Data=readRDS(opt$rds)
 
 
 #plot1 <- VlnPlot(Spatial_Data, features = c("nCount_Spatial","nFeature_Spatial"), ncol = 2) & theme(legend.position = "bottom")
-plot2 <- SpatialFeaturePlot(Spatial_Data, features = c("nCount_Spatial","nFeature_Spatial"),pt.size.factor=1.1,ncol = 2) & 
+plot2 <- SpatialFeaturePlot(Spatial_Data, features = c("nCount_Spatial","nFeature_Spatial"),pt.size.factor=4.3,ncol = 2) & 
 theme(legend.position = "right") & scale_fill_continuous(type="viridis")
 #wrap_plots(plot1, plot2) -> wp
 

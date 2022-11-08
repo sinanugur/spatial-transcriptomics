@@ -60,7 +60,7 @@ suppressMessages(for (i in 1:nrow(Positive_Features)) {
 p1 <- FeaturePlot(scrna, reduction = "umap", features=gene) + scale_color_continuous(type="viridis")
 p2 <- DotPlot(scrna, features=gene)
 p3 <- VlnPlot(scrna,features=gene)
-p4 <- SpatialFeaturePlot(scrna, features = gene, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=1.1) + scale_fill_continuous(type="viridis")
+p4 <- SpatialFeaturePlot(scrna, features = gene, ncol = 1, alpha = c(0.1, 1),images=paste0("image"),pt.size.factor=4.3) + scale_fill_continuous(type="viridis")
 suppressWarnings(((p1|p2)/(p3|p4)) -> wp)
 
 ggsave(paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/markers/cluster",cluster,"/",gene,".pdf"),wp,height=9,width=9)

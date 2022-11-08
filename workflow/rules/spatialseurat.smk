@@ -138,7 +138,8 @@ rule selected_markers_plots:
 rule positive_markers_plots:
     input:
         rds="analyses/processed/{res}/{sample}.rds",
-        excel="results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx"
+        excel="results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx",
+        imagefile=data_directory + "/{sample}/outs/spatial/tissue_fixed.png"
     output:
         directory("results/{sample}/resolution-{res}/markers/")
     shell:

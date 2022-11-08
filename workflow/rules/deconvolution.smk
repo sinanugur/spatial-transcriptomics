@@ -36,7 +36,8 @@ rule spotlight_decon:
 rule spotlight_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/spotlight/{datafile}/{sample}.csv"
+        csv="analyses/spotlight/{datafile}/{sample}.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/spotlight/{sample}-{datafile}-spotlight.pdf"
     shell:
@@ -93,7 +94,8 @@ rule tangram_cluster:
 rule tangram_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/tangram/{datafile}/{sample}.csv"
+        csv="analyses/tangram/{datafile}/{sample}.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/tangram/{sample}-{datafile}-tangram.pdf"
     shell:
@@ -125,7 +127,8 @@ rule tangram_gene_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
         predicted="analyses/tangramgene/{datafile}/{sample}.predicted.csv",
-        measured="analyses/tangramgene/{datafile}/{sample}.measured.csv"
+        measured="analyses/tangramgene/{datafile}/{sample}.measured.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         directory("results/{sample}/deconvolution/tangramgene/{datafile}/")
     shell:
@@ -151,7 +154,8 @@ rule cell2location:
 rule cell2loc_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/cell2location/{datafile}/{sample}.csv"
+        csv="analyses/cell2location/{datafile}/{sample}.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf"
     shell:
@@ -200,7 +204,8 @@ rule rctd_decon:
 rule rctd_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/rctd/{datafile}/{sample}.csv"
+        csv="analyses/rctd/{datafile}/{sample}.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/rctd/{sample}-{datafile}-rctd.pdf"
     shell:
@@ -211,7 +216,8 @@ rule rctd_pdf:
 rule dwls_pdf:
     input:
         rds="analyses/raw/{sample}.rds",
-        csv="analyses/cell2location/{datafile}/{sample}.csv"
+        csv="analyses/cell2location/{datafile}/{sample}.csv",
+        imagefile="data/{sample}/outs/spatial/tissue_fixed.png"
     output:
         "results/{sample}/deconvolution/cell2location/{sample}-{datafile}-cell2location.pdf"
     shell:
