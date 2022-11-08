@@ -3,7 +3,7 @@
 option_list = list(
     optparse::make_option(c("--type"), type="character", default="RNA", 
               help="Assay type, RNA, or Spatial", metavar="character"),
-    optparse::make_option(c("-r","--rds"), type="character", default=NULL, 
+    optparse::make_option(c("--rds"), type="character", default=NULL, 
               help="A list of RDS files of Seurat objects", metavar="character"),
     optparse::make_option(c("--output"), type="character", default="output.file", 
               help="Output h5ad file name", metavar="character")
@@ -34,7 +34,7 @@ DietSeurat(scrna) -> scrna
 
 scrna@meta.data %>% dplyr::mutate(dplyr::across(where(is.factor), as.character)) -> scrna@meta.data
 
+output_file_name=str_remove_all(opt$output,".h5ad$")
 
-
-SaveH5Seurat(scrna,paste0(opt$output,".h5Seurat"),overwrite = TRUE)
-SeuratDisk::Convert(paste0(opt$output,".h5Seurat"), dest = "h5ad",overwrite = TRUE)
+SaveH5Seurat(scrna,paste0(output_file_name,".h5Seurat"),overwrite = TRUE)
+SeuratDisk::Convert(paste0(output_file_name,".h5Seurat"), dest = "h5ad",overwrite = TRUE)

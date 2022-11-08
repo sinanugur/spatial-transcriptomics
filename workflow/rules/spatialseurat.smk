@@ -160,3 +160,26 @@ rule spatialfeatures:
 
         """
 
+rule h5ad:
+    input:
+        rds="analyses/processed/{res}/{sample}.rds"
+    output:
+        "analyses/h5ad/{res}/{sample}.h5ad"
+    shell:
+        "workflow/scripts/sp-convert-to-h5ad.R --rds {input.rds} --output {output} --type Spatial"
+
+
+rule celltype:
+    input:
+        "analyses/h5ad/{res}/{sample}.h5ad"
+    
+    output:
+        outputdir=directory("analyses/celltypist/{res}/{sample}/"+ f"{celltypist_model}"),
+        predicted="analyses/celltypist/{res}/{sample}/" + f"{celltypist_model}" + "/predicted_labels.csv",
+        dotplot="results" + "/{sample}/resolution-{res}" +  "/celltype_annotation/annotation." + f"{celltypist_model}" +  ".dotplot.pdf",
+        xlsx="results" + "/{sample}/resolution-{res}" + "/celltype_annotation/cluster_annotation_table." + f"{celltypist_model}" + ".xlsx"
+        
+    shell:
+        """
+        workflow/scripts/sp-celltypist.py {input} {output.dotplot} {output.outputdir} {output.xlsx} {celltypist_model}
+        """

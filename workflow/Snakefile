@@ -79,7 +79,8 @@ elif route == "standard":
             expand(["results/{sample}/resolution-" + x + "/markers/" for x in resolution], sample=files),
             expand(["results/{sample}/resolution-" + x + "/{sample}.umap.pdf" for x in resolution], sample=files),
             expand("results/{sample}/TissueImage/{sample}.filtered.png",sample=files),
-            expand("results/{sample}/technicals/SpatialFeature_QC.pdf",sample=files)
+            expand("results/{sample}/technicals/SpatialFeature_QC.pdf",sample=files),
+            expand(["results/{sample}/resolution-" + x + "/celltype_annotation/annotation." + f"{celltypist_model}" + ".dotplot.pdf" for x in resolution],sample=files)
             #expand(["results/{sample}/resolution-" + x + "/enrichment/GO-enrichment-all_clusters-ontology-{ontology}.xlsx".format(ontology=ontology) for x in resolution], sample=files)
 
 elif route == "clustree" or route == "clusteringTree":
