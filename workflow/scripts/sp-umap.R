@@ -26,6 +26,7 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 require(Seurat)
 require(tidyverse)
 require(patchwork)
+require(randomcoloR)
 
 
 source("workflow/scripts/scrna-functions.R")
@@ -34,8 +35,11 @@ Spatial_Data=readRDS(file = opt$rds)
 
 function_image_fixer(Spatial_Data,opt$sampleid) -> Spatial_Data
 
-p1 <- DimPlot(Spatial_Data, reduction = "umap", label = TRUE,label.size = 5) 
-p2 <- SpatialDimPlot(Spatial_Data, label = TRUE, label.size = 5,images=paste0("image"),pt.size.factor=4.3)
+palette <- distinctColorPalette(length(unique(Idents(Spatial_Data))))
+names(palette)=as.character(unique(Idents(Spatial_Data)))
+
+p1 <- DimPlot(Spatial_Data, reduction = "umap", label = TRUE,label.size = 5,cols=palette) 
+p2 <- SpatialDimPlot(Spatial_Data, label = TRUE, label.size = 5,images=paste0("image"),pt.size.factor=4.3,cols=palette)
 
 
 

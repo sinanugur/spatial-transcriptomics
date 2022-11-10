@@ -96,4 +96,6 @@ ggsave(paste0(output.dir,"after-qc-trimming-violinplot.pdf"), width = 10,height 
 scrna <- SCTransform(scrna,assay = "Spatial",verbose = FALSE)
 DefaultAssay(scrna) <- "Spatial"
 
+scrna@meta.data$orig.ident <- opt$sampleid
+
 saveRDS(scrna,file = opt$output)
