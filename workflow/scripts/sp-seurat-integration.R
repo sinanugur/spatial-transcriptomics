@@ -6,7 +6,12 @@ option_list = list(
     optparse::make_option(c("-r","--rds"), type="character", default=NULL, 
               help="A list of RDS files of Seurat objects", metavar="character"),
     optparse::make_option(c("--resolution"), type="double", default=0.8, 
-              help="Resolution [default= %default]", metavar="character")
+              help="Resolution [default= %default]", metavar="character"),
+    optparse::make_option(c("--umap.plot"), type="character", default="umap.pdf", 
+              help="Resolution [default= %default]", metavar="character"),
+    optparse::make_option(c("--output"), type="character", default="output.pdf", 
+              help="Output file name [default= %default]", metavar="character")
+    
 
 
 )
@@ -42,6 +47,11 @@ for(i in files) {
 }
 
 
+for (i in 1:length(scrna_list)){
+
+    DefaultAssay(scrna_list[[i]]) <- "SCT"
+
+}
 
 features <- SelectIntegrationFeatures(object.list = scrna_list, nfeatures = 3000)
 scrna_list <- PrepSCTIntegration(object.list = scrna_list, anchor.features = features)
@@ -63,20 +73,18 @@ scrna.combined.sct <- RunUMAP(scrna.combined.sct, reduction = "pca", dims = 1:30
 p1 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "orig.ident")
 p2 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "seurat_clusters", label = TRUE,
     repel = TRUE)
-p1 + p2
 
 
 
-output.dir=paste0("results/integration/seurat/technicals/")
-dir.create(output.dir,recursive = T)
+#output.dir=paste0("results/integration/seurat/technicals/")
+#dir.create(output.dir,recursive = T)
 
-DimPlot(scrna,reduction = "umap",group.by="orig.ident")
-ggsave(file=paste0(output.dir,opt$sampleid,"-after-integration-umap.pdf"))
+ggsave(file=opt$umap.plot,p1+p2)
 
 
 
 
-output.dir=paste0("analyses/integration/seurat/")
-dir.create(output.dir,recursive = T)
+#output.dir=paste0("analyses/integration/seurat/")
+#dir.create(output.dir,recursive = T)
 
-saveRDS(scrna,file = paste0(output.dir,opt$sampleid,"_seurat",".rds"))
+saveRDS(scrna.combined.sct,file = opt$output)

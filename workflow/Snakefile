@@ -94,6 +94,11 @@ elif  route == "bayesspace":
             expand("analyses/bayesspace/{sample}.sce.enhanced.rds",sample=files),
             expand("results/{sample}/bayesspace/{sample}.cluster_plot.pdf",sample=files),
             expand("results/{sample}/bayesspace/plots/",sample=files)
+
+elif route == "seuratintegrate":
+    rule sintegrate:
+        input:
+            "analyses/integration/seurat/" + integration_id + "_seurat.rds"
             
 elif route == "integrate":
     files, = glob_wildcards("analyses/bayesspace/{sample}.sce.rds")

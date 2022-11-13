@@ -177,6 +177,18 @@ rule bayesspace_integrate:
         workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony}
         """
 
+rule seurat_integrate:
+    input:
+        expand("analyses/raw/{sample}.rds",sample=files)
+    output:
+        rds="analyses/integration/seurat/" + integration_id + "_seurat.rds",
+        #umap="results/integration/seurat/" + integration_id + ".umap_before_integration.pdf",
+        umap="results/integration/seurat/" + integration_id + ".umap_after_integration.pdf"
+    shell:
+        """
+        workflow/scripts/sp-seurat-integration.R --rds "{input}" --sampleid {integration_id} --umap.plot {output.umap} --output {output.rds}
+        """
+
 
 rule giotto_dwls:
     input:
