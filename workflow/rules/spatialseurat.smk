@@ -113,16 +113,7 @@ rule umap_plot:
 
 
     
-rule clustermarkers:
-    input:
-        rds="analyses/processed/{res}/{sample}.rds"
-    output:
-        "results/{sample}/resolution-{res}/{sample}.positive-markers-forAllClusters.xlsx",
-        "results/{sample}/resolution-{res}/{sample}.all-markers-forAllClusters.xlsx"
-    shell:
-        """
-        workflow/scripts/sp-find-markers.R --rds {input.rds} --resolution {wildcards.res} --sampleid {wildcards.sample} --logfc.threshold {logfc_threshold} --test.use {test_use}
-        """
+
 
 rule selected_markers_plots:
     input:

@@ -15,7 +15,13 @@ option_list = list(
               help="LogFC [default= %default]", metavar="character"),
 
     optparse::make_option(c("--test.use"), type="character", default="wilcox", 
-              help="Test use [default= %default]", metavar="character")
+              help="Test use [default= %default]", metavar="character"),
+    optparse::make_option(c("--output.xlsx.positive"), type="character", default=NULL, 
+              help="Excel table of positive markers", metavar="character"),
+    optparse::make_option(c("--output.xlsx.all"), type="character", default=NULL, 
+              help="Excel table of all markers", metavar="character")
+    
+    
 
 
 )
@@ -41,20 +47,17 @@ scrna=readRDS(file = opt$rds)
 
 
 
-SCT_=paste0("SCT_snn_res.",opt$resolution)
+#try({SCT_=paste0("SCT_snn_res.",opt$resolution)})
+
+#try({SCT_=paste0("integrated_snn_re.",opt$resolution)})
 
 
-Idents(object = scrna) <- scrna@meta.data[[SCT_]]
-
+#Idents(object = scrna) <- scrna@meta.data[[SCT_]]
 
 all_markers=FindAllMarkers(scrna, logfc.threshold = opt$logfc.threshold,test.use = opt$test.use )
 
 
 
-output.dir=paste0("results/",opt$sampleid,"/resolution-",opt$resolution,"/")
-dir.create(output.dir,recursive = T)
+openxlsx::write.xlsx(all_markers,file=opt$output.xlsx.all)
 
-
-openxlsx::write.xlsx(all_markers,file=paste0(output.dir,opt$sampleid,".all-markers-forAllClusters",".xlsx"))
-
-openxlsx::write.xlsx(all_markers %>% filter(avg_log2FC > 0),file=paste0(output.dir,opt$sampleid,".positive-markers-forAllClusters",".xlsx"))
+openxlsx::write.xlsx(all_markers %>% filter(avg_log2FC > 0),file=opt$output.xlsx.positive)

@@ -98,7 +98,8 @@ elif  route == "bayesspace":
 elif route == "seuratintegrate":
     rule sintegrate:
         input:
-            "analyses/integration/seurat/" + integration_id + "_seurat.rds"
+            ["analyses/integration/seurat/" + integration_id + ".resolution-" + x + ".seurat.rds" for x in resolution],
+            ["results/integration/seurat/" + integration_id + ".resolution-" +  x + ".positive-markers-forAllClusters.xlsx" for x in resolution]
             
 elif route == "integrate":
     files, = glob_wildcards("analyses/bayesspace/{sample}.sce.rds")
