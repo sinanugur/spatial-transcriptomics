@@ -58,6 +58,7 @@ def get_mem_mb(wildcards, threads):
 
 include: "rules/spatialseurat.smk"
 include: "rules/deconvolution.smk"
+include: "rules/integration.smk"
 
 if route == "minimal":
     rule all:

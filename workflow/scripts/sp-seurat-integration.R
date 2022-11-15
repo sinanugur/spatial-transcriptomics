@@ -79,7 +79,7 @@ p2 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "seurat_cluster
 #output.dir=paste0("results/integration/seurat/technicals/")
 #dir.create(output.dir,recursive = T)
 
-ggsave(file=opt$umap.plot,p1+p2)
+ggsave(file=opt$umap.plot,p1+p2,height=5,width=11)
 
 
 
