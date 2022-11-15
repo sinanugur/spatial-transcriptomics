@@ -35,7 +35,7 @@ rule clustermarkers_seurat_integration:
         workflow/scripts/sp-find-markers.R --rds {input.rds} --resolution {wildcards.res} --sampleid {integration_id} --logfc.threshold {logfc_threshold} --test.use {test_use} --output.xlsx.positive {output.positive} --output.xlsx.all {output.allmarkers}
         """
 
-rule clustree:
+rule clustree_integration:
     input:
         expand("analyses/raw/{sample}.rds",sample=files)
     output:
