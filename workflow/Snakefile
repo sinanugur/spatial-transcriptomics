@@ -50,7 +50,8 @@ integration_id=config.get("integration_id","combined")
 integration_resolution=str(config.get("resolution",0.8))
 celltypist_model=config.get("celltypist_model","Immune_All_Low.pkl")
 
-bayesspace_pca_dimension=config.get("bayesspace_pca_dimension",15)
+bayesspace_pca_dimension=config.get("bayesspace_pca_dimension",30)
+bayesspace_n_clusters=config.get("bayesspace_n_clusters",13)
 
 
 def get_mem_mb(wildcards, threads):
@@ -59,6 +60,7 @@ def get_mem_mb(wildcards, threads):
 include: "rules/spatialseurat.smk"
 include: "rules/deconvolution.smk"
 include: "rules/integration.smk"
+include: "rules/bayesspace.smk"
 
 if route == "minimal":
     rule all:
@@ -92,8 +94,13 @@ elif route == "clustree" or route == "clusteringTree":
 elif  route == "bayesspace":
     rule bayes:
         input:
-            expand("analyses/bayesspace/{sample}.sce.enhanced.rds",sample=files),
+            #expand("analyses/bayesspace/{sample}.sce.enhanced.rds",sample=files),
             expand("results/{sample}/bayesspace/{sample}.cluster_plot.pdf",sample=files),
+
+elif  route == "enhance":
+    rule bayes:
+        input:
+            expand("analyses/bayesspace/{sample}.sce.enhanced.rds",sample=files),
             expand("results/{sample}/bayesspace/plots/",sample=files)
 
 elif route == "seuratintegrate":
@@ -102,7 +109,7 @@ elif route == "seuratintegrate":
             ["analyses/integration/seurat/" + integration_id + ".resolution-" + x + ".seurat.rds" for x in resolution],
             ["results/integration/seurat/" + integration_id + ".resolution-" +  x + ".positive-markers-forAllClusters.xlsx" for x in resolution]
             
-elif route == "integrate":
+elif route == "bayesintegrate":
     files, = glob_wildcards("analyses/bayesspace/{sample}.sce.rds")
     rule all:
         input:

@@ -27,6 +27,7 @@ if (is.null(opt$rds) || is.null(opt$sampleid) ){
 require(tidyverse)
 require(Seurat)
 require(patchwork)
+require(randomcoloR)
 source("workflow/scripts/scrna-functions.R")
 
 files= unlist(strsplit(opt$rds, " "))
@@ -68,11 +69,12 @@ scrna.combined.sct  <- FindNeighbors(scrna.combined.sct , dims = 1:30)
 scrna.combined.sct <- FindClusters(scrna.combined.sct , verbose = FALSE)
 scrna.combined.sct <- RunUMAP(scrna.combined.sct, reduction = "pca", dims = 1:30)
 
+palette <- distinctColorPalette(length(unique(Idents(scrna.combined.sct ))))
+names(palette)=as.character(unique(Idents(scrna.combined.sct)))
 
-
-p1 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "orig.ident")
+p1 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "orig.ident",cols=palette)
 p2 <- DimPlot(scrna.combined.sct, reduction = "umap", group.by = "seurat_clusters", label = TRUE,
-    repel = TRUE)
+    repel = TRUE,cols=palette)
 
 
 

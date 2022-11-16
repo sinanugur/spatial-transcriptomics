@@ -3,15 +3,17 @@
 option_list = list(
   optparse::make_option(c("--pca.dimension"), type="integer", default=30, 
               help="PCA dimensions [default= %default]", metavar="integer"),
-    optparse::make_option(c("--data.dir"), type="character", default=NULL, 
-              help="Visium data directory", metavar="character"),
+    optparse::make_option(c("--input.rds"), type="character", default=NULL, 
+              help="Bayesspace RDS file", metavar="character"),
     optparse::make_option(c("--output.sce"), type="character", default="output.sce.rds", 
               help="Output RDS sce file name", metavar="character"),
+    optparse::make_option(c("--output.enhanced"), type="character", default="output.enhanced.rds", 
+              help="Output RDS enhanced file name", metavar="character"),
     optparse::make_option(c("--qplot"), type="character", default="qplot.pdf", 
               help="Qplot filename", metavar="character"),
     optparse::make_option(c("--cluster.plot"), type="character", default="cluster.plot.pdf", 
               help="Cluster plot filename", metavar="character"),
-    optparse::make_option(c("--n.cluster"), type="integer", default=NULL, 
+    optparse::make_option(c("--n.cluster"), type="character", default=NULL, 
               help="Number of clusters, if not given, autoselect", metavar="integer"),
     optparse::make_option(c("--sampleid"), type="character", default=NULL, 
               help="Sample ID", metavar="character")
@@ -23,7 +25,7 @@ option_list = list(
 opt_parser = optparse::OptionParser(option_list=option_list)
 opt = optparse::parse_args(opt_parser)
 
-if (is.null(opt$data.dir)){
+if (is.null(opt$input)){
   optparse::print_help(opt_parser)
   stop("At least one argument must be supplied (data.dir and sampleid)", call.=FALSE)
 }
@@ -33,7 +35,6 @@ require(tidyverse)
 require(Seurat)
 require(patchwork)
 require(BayesSpace)
-require(randomcoloR)
 
 
 domanska_muscularis=data.frame(gene=c("FCER1A","CDC1C","CLEC10A","CCL3L1","CCL3","CCL4L2","MT1X","MT1E","CTSL","RGS1","FOS","APOE","DNASE1L3","MMP9","LYZ","AREG","EREG","CCL20","S100A9","S100A8","EREG","FCN1","VCAN","LYZ","HSPA1A","HSPA6","HSPA1B","LYVE1","MARCO","COLEC12"),group=c(3,3,3,5,5,5,6,6,6,7,7,7,4,4,4,1,1,1,0,0,0,2,2,2,9,9,9,11,11,11))
@@ -42,12 +43,10 @@ domanska_mucosas=data.frame(gene=c("LYVE1","F13A1","FOLR2","SELENOP","APOE","SLC
 domanska_markers=bind_rows(domanska_mucosas,domanska_muscularis) %>% distinct(gene) %>% pull()
 
 
-sce <- readVisium(opt$data.dir)
-
 
 set.seed(102)
 sce <- spatialPreprocess(sce, platform="Visium", 
-                              n.PCs=30, n.HVGs=2000, log.normalize=TRUE)
+                              n.PCs=25, n.HVGs=2000, log.normalize=TRUE)
 
 sce <- qTune(sce, qs=seq(2, 15), platform="Visium", d=opt$pca.dimension,gamma=3)
 qPlot(sce)
@@ -83,13 +82,27 @@ sce <- spatialCluster(sce, q=n, platform="Visium", d=opt$pca.dimension,
 sce$sample_name <- opt$sampleid
 
 
-palette <- distinctColorPalette(n)
-names(palette)=as.character(unique(sce$spatial.cluster))
+set.seed(149)
+sce_enhanced <- spatialEnhance(sce, q=n, platform="Visium", d=opt$pca.dimension,
+                                    model="t", gamma=3,
+                                    jitter_prior=0.3, jitter_scale=3.5,
+                                    nrep=10000, burn.in=100,
+                                    save.chain=TRUE)
 
-clusterPlot(sce,palette=palette)  + scale_x_reverse() + scale_y_reverse() ->  wp
+
+wrap_plots(clusterPlot(sce)  + scale_x_reverse() + scale_y_reverse(),
+clusterPlot(sce_enhanced,is.enhanced = T) + scale_x_reverse() + scale_y_reverse()) -> wp
 
 ggsave(filename=opt$cluster.plot,wp)
 
 
+sce_enhanced <- enhanceFeatures(sce_enhanced, sce,
+                                     feature_names=domanska_markers,model = "xgboost",
+                                     nrounds=0)
+
+
+sce_enhanced$sample_name <- opt$sampleid
+
 saveRDS(sce,opt$output.sce)
+saveRDS(sce_enhanced,opt$output.enhanced)
 
