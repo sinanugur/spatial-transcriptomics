@@ -59,7 +59,7 @@ for(i in files) {
 }
 
 #Combine into 1 SCE and preprocess
-sce.combined = spatialPreprocess(sce.combined, n.PCs = 25,platform="Visium") #lognormalize, PCA
+sce.combined = spatialPreprocess(sce.combined, n.PCs = 30,platform="Visium") #lognormalize, PCA
 sce.combined =  runUMAP(sce.combined, dimred = "PCA")
 
 colnames(reducedDim(sce.combined, "UMAP")) = c("UMAP1", "UMAP2")

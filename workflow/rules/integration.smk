@@ -1,16 +1,3 @@
-rule bayesspace_integrate:
-    input:
-        expand("analyses/bayesspace/{sample}.sce.rds",sample=files)
-    output:
-        rds="analyses/integration/bayesspace/" + integration_id + "_bayesspace.rds",
-        umap="results/integration/bayesspace/" + integration_id + ".umap_before_integration.pdf",
-        harmony="results/integration/bayesspace/" + integration_id + ".umap_after_integration.pdf",
-
-
-    shell:
-        """
-        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony}
-        """
 
 rule seurat_integrate:
     input:
