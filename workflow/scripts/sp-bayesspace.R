@@ -82,7 +82,7 @@ sce <- spatialCluster(sce, q=n, platform="Visium", d=opt$pca.dimension,
 
 sce$sample_name <- opt$sampleid
 
-
+set.seed(149)
 palette <- distinctColorPalette(n)
 names(palette)=as.character(unique(sce$spatial.cluster))
 

@@ -4,8 +4,8 @@ option_list = list(
 
     optparse::make_option(c("--input"), type="character", default=NULL, 
               help="Input bayesspace RDS enhanced file name", metavar="character"),
-        optparse::make_option(c("--sampleid"), type="character", default=NULL, 
-              help="Sample ID", metavar="character")
+    optparse::make_option(c("--output.dir"), type="character", default=NULL, 
+              help="Plot output directory", metavar="character"),
 
 
 
@@ -37,14 +37,14 @@ domanska_markers=bind_rows(domanska_mucosas,domanska_muscularis) %>% distinct(ge
 options(warn=-1)
 suppressMessages(for (i in domanska_markers) {
 
-dir.create(paste0("results/",opt$sampleid,"/bayesspace/plots/"))
+dir.create(opt$output.dir)
 
 try({
 
 
 featurePlot(sce_enhanced, i) -> wp
 
-ggsave(paste0("results/",opt$sampleid,"/bayesspace/plots/",i,".pdf"),wp,height=4,width=4)
+ggsave(paste0(opt$output.dir,"/",i,".pdf"),wp,height=4,width=4)
 
 })
 

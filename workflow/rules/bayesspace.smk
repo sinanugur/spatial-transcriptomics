@@ -20,7 +20,7 @@ rule bayesspace_enhance:
     params:
         d=data_directory + "/{sample}/outs/"
     shell:
-        "workflow/scripts/sp-bayesspace.R  --sampleid {wildcards.sample} --pca.dimension {bayesspace_pca_dimension} --n.cluster {bayesspace_n_clusters} --data.dir {params.d} --output.sce {output.sce}  --cluster.plot {output.clusterplot} --qplot {output.qplot}"
+        "workflow/scripts/sp-bayesspace-enhance.R --input {input.sce}  --sampleid {wildcards.sample} --pca.dimension {bayesspace_pca_dimension} --n.cluster {bayesspace_n_clusters} --output.enhanced {output.enhanced}"
 
 
 
@@ -30,6 +30,6 @@ rule bayesspaceplots:
     output:
         directory("results/{sample}/bayesspace/plots/")
     shell:
-        "workflow/scripts/sp-bayesspace-feature-plot.R --input {input} --sampleid {wildcards.sample}"
+        "workflow/scripts/sp-bayesspace-feature-plot.R --input {input} --output.dir {output}"
 
 
