@@ -40,13 +40,9 @@ domanska_markers=bind_rows(domanska_mucosas,domanska_muscularis) %>% distinct(ge
 
 sce=readRDS(opt$input)
 
-
+n= opt$n.cluster
 set.seed(149)
-sce_enhanced <- spatialEnhance(sce, q=opt$n.cluster, platform="Visium", d=opt$pca.dimension,
-                                    model="t", gamma=3,
-                                    jitter_prior=0.3, jitter_scale=3.5,
-                                    nrep=10000, burn.in=100,
-                                    save.chain=TRUE)
+sce_enhanced <- spatialEnhance(sce, q=n, platform="Visium", d=opt$pca.dimension,   model="t", gamma=3,                                    jitter_prior=0.3, jitter_scale=3.5,                                    nrep=10000, burn.in=100,                                    save.chain=TRUE)
 
 
 set.seed(149)
