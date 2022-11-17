@@ -44,6 +44,6 @@ rule bayesspace_integrate:
 
     shell:
         """
-        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony}
+        workflow/scripts/sp-bayesspace-integration.R --rds "{input}" --sampleid {integration_id} --output {output.rds} --umap.plot {output.umap} --harmony.plot {output.harmony} --n.cluster {bayesspace_n_clusters} 
         """
 
