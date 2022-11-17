@@ -5,19 +5,16 @@ option_list = list(
     optparse::make_option(c("--input"), type="character", default=NULL, 
               help="Input bayesspace RDS enhanced file name", metavar="character"),
     optparse::make_option(c("--output.dir"), type="character", default=NULL, 
-              help="Plot output directory", metavar="character"),
-
-
-
+              help="Plot output directory", metavar="character")
 
 )
  
 opt_parser = optparse::OptionParser(option_list=option_list)
 opt = optparse::parse_args(opt_parser)
 
-if (is.null(opt$input) || is.null(opt$sampleid)){
+if (is.null(opt$input)){
   optparse::print_help(opt_parser)
-  stop("At least one argument must be supplied (input.enhanced)", call.=FALSE)
+  stop("At least one argument must be supplied (input)", call.=FALSE)
 }
 
 require(optparse)
