@@ -10,7 +10,9 @@ option_list = list(
     optparse::make_option(c("--umap.plot"), type="character", default="umap.plot.pdf", 
               help="UMAP plot file name", metavar="character"),
     optparse::make_option(c("--harmony.plot"), type="character", default="harmony.plot.pdf", 
-              help="Harmony pplot file name", metavar="character")
+              help="Harmony pplot file name", metavar="character"),
+    optparse::make_option(c("--n.cluster"), type="integer", default=NULL, 
+              help="Number of clusters, if not given, autoselect", metavar="integer")
 
 
     
@@ -58,6 +60,10 @@ for(i in files) {
 
 }
 
+n=opt$n.cluster
+
+
+
 #Combine into 1 SCE and preprocess
 sce.combined = spatialPreprocess(sce.combined, n.PCs = 30,platform="Visium") #lognormalize, PCA
 sce.combined =  runUMAP(sce.combined, dimred = "PCA")
@@ -77,11 +83,19 @@ sce.combined = RunHarmony(sce.combined, "sample_name", verbose = F)
 sce.combined = runUMAP(sce.combined, dimred = "HARMONY", name = "UMAP.HARMONY")
 colnames(reducedDim(sce.combined, "UMAP.HARMONY")) = c("UMAP1", "UMAP2")
 
+sce.combined = spatialCluster(sce.combined, use.dimred = "HARMONY", q = n, nrep = 10000)
+
+set.seed(149)
+palette <- distinctColorPalette(n)
+names(palette)=as.character(unique(sce.combined$spatial.cluster))
+
 ggplot(data.frame(reducedDim(sce.combined, "UMAP.HARMONY")) %>% dplyr::mutate(sample=factor(sce.combined$sample_name)), 
        aes(x = UMAP1, y = UMAP2, color = sample)) +
   geom_point() +
-  labs(color = "Sample") +
+  scale_color_manual(values = palette,limits = force) +
   theme_bw() + facet_wrap(~sample,ncol = 4) -> p2
+
+
 
 ggsave(filename = opt$harmony.plot,p2)
 
