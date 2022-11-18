@@ -34,6 +34,7 @@ require(Seurat)
 require(BayesSpace)
 require(scater)
 require(harmony)
+require(randomcoloR)
 
 
 
