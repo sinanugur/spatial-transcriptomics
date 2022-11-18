@@ -21,13 +21,3 @@ rule clustermarkers_seurat_integration:
         """
         workflow/scripts/sp-find-markers.R --rds {input.rds} --resolution {wildcards.res} --sampleid {integration_id} --logfc.threshold {logfc_threshold} --test.use {test_use} --output.xlsx.positive {output.positive} --output.xlsx.all {output.allmarkers}
         """
-
-rule clustree_integration:
-    input:
-        expand("analyses/raw/{sample}.rds",sample=files)
-    output:
-        clustree="results/{sample}/clusteringTree/clusteringTree-{sample}.pdf",
-        heatmap="results/{sample}/technicals/DimHeatMap_plot.pdf",
-        hvfplot="results/{sample}/technicals/highly-variable-features.pdf"
-    shell:
-        "workflow/scripts/sp-clusteringtree.R --rds {input} --output {output.clustree} --heatmap {output.heatmap} --hvfplot {output.hvfplot}"
