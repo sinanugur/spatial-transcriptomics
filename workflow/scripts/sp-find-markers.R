@@ -31,7 +31,7 @@ option_list = list(
 opt_parser = optparse::OptionParser(option_list=option_list)
 opt = optparse::parse_args(opt_parser)
 
-if (is.null(opt$rds) || is.null(opt$sampleid) ){
+if (is.null(opt$rds)){
   optparse::print_help(opt_parser)
   stop("At least one argument must be supplied (rds file and sampleid)", call.=FALSE)
 }
