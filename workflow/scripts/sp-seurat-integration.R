@@ -36,11 +36,21 @@ for(i in files) {
 
     if(!exists("scrna_list")) {
 
-        scrna_list=list(readRDS(file = i))
+        scrna=readRDS(file=i)
+        
+        sample_id= sstr_remove_all(str_match(i,"analyses/raw/(.*)")[,2],"\\.rds")
+        function_image_fixer(scrna,sample_id) -> scrna
+
+        scrna_list=list(scrna)
 
     } else {
 
-        scrna_list=append(scrna_list,readRDS(file = i))
+        scrna=readRDS(file=i)
+        
+        sample_id= sstr_remove_all(str_match(i,"analyses/raw/(.*)")[,2],"\\.rds")
+        function_image_fixer(scrna,sample_id) -> scrna
+
+        scrna_list=append(scrna_list,scrna)
     }
     
 
