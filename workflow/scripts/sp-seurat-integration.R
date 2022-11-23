@@ -38,7 +38,7 @@ for(i in files) {
 
         scrna=readRDS(file=i)
         
-        sample_id= sstr_remove_all(str_match(i,"analyses/raw/(.*)")[,2],"\\.rds")
+        sample_id= str_remove_all(str_match(i,"analyses/raw/(.*)")[,2],"\\.rds")
         function_image_fixer(scrna,sample_id) -> scrna
 
         scrna_list=list(scrna)
